@@ -28,7 +28,7 @@ class HatimPartModel {
       hatimName: json['hatimName'],
       pages: List<int>.from(json['pages']),
       ownerOfPart: json['ownerOfPart'] != null
-          ? MyUser.fromMap(json['ownerOfPart'])
+          ? MyUser.fromJson(json['ownerOfPart'])
           : null,
       remainingPages: List<int>.from(json['remainingPages']),
       deadline:
@@ -43,7 +43,7 @@ class HatimPartModel {
       'hatimID': hatimID,
       'hatimName': hatimName,
       'pages': pages,
-      'ownerOfPart': ownerOfPart != null ? ownerOfPart!.toMap() : null,
+      'ownerOfPart': ownerOfPart != null ? ownerOfPart!.toJson() : null,
       'remainingPages': remainingPages,
       'deadline': deadline != null ? deadline!.toIso8601String() : null,
       'isPrivate': isPrivate,

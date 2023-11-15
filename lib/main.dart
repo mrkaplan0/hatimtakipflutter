@@ -48,16 +48,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
- /*
-
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              routes: {"/RouterPage": (context) => const RouterPage()},
-              theme: ThemeData(
-                fontFamily: "JosefinSans",
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-                useMaterial3: true,
-              ),
-              home: const RouterPage(),
-            );
- */

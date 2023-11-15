@@ -1,32 +1,35 @@
 class MyUser {
-  String? id;
+  String id;
   String? email;
-  String? username;
+  String username;
   String? userToken;
   List<MyUser>? favoritesPeople;
 
   MyUser(
       {required this.id,
-      required this.username,
       this.email,
+      required this.username,
+      this.userToken,
       this.favoritesPeople});
 
-  Map<String, dynamic> toMap() {
+  factory MyUser.fromJson(Map<String, dynamic> json) {
+    return MyUser(
+        id: json['id'],
+        email: json['email'],
+        username: json['username'],
+        userToken: json['userToken'],
+        favoritesPeople: json['favoritesPeople']);
+  }
+
+  Map<String, dynamic> toJson() {
     return {
-      'userID': id,
+      'id': id,
       'email': email,
       'username': username,
       'userToken': userToken,
       'favoritesPeople': favoritesPeople
     };
   }
-
-  MyUser.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        email = map['email'],
-        username = map['username'],
-        userToken = map['userToken'],
-        favoritesPeople = map['favoritesPeople'];
 
   @override
   String toString() {

@@ -28,13 +28,13 @@ class Hatim {
     return Hatim(
       id: json['id'],
       hatimName: json['hatimName'],
-      createdBy: MyUser.fromMap(json['createdBy']),
+      createdBy: MyUser.fromJson(json['createdBy']),
       isIndividual: json['isIndividual'],
       isPrivate: json['isPrivate'],
       deadline:
           json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
       participantsList: List<MyUser>.from(
-          json['participantsList'].map((x) => MyUser.fromMap(x))),
+          json['participantsList'].map((x) => MyUser.fromJson(x))),
       partsOfHatimList: List<HatimPartModel>.from(
           json['partsOfHatimList'].map((x) => HatimPartModel.fromJson(x))),
       createdTime: DateTime.parse(json['createdTime']),
@@ -45,12 +45,12 @@ class Hatim {
     return {
       'id': id,
       'hatimName': hatimName,
-      'createdBy': createdBy.toMap(),
+      'createdBy': createdBy.toJson(),
       'isIndividual': isIndividual,
       'isPrivate': isPrivate,
       'deadline': deadline != null ? deadline!.toIso8601String() : null,
       'participantsList':
-          List<dynamic>.from(participantsList.map((x) => x.toMap())),
+          List<dynamic>.from(participantsList.map((x) => x.toJson())),
       'partsOfHatimList':
           List<dynamic>.from(partsOfHatimList.map((x) => x.toJson())),
       'createdTime': createdTime.toIso8601String(),

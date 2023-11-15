@@ -4,6 +4,7 @@ import 'package:hatimtakipflutter/Viewmodels/user_viewmodel.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
 import 'package:hatimtakipflutter/Views/Widgets/header.dart';
 import 'package:hatimtakipflutter/Views/homepage/homepage.dart';
+import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
 class SignInPage extends ConsumerWidget {
@@ -17,20 +18,39 @@ class SignInPage extends ConsumerWidget {
   final String _passwordLabelText = 'Şifre';
   final String _passwordHintText = 'Şifrenizi giriniz.';
   final String _signUpButtonText = "Kaydolun";
+  final String _canNotNilText = "Bu alan bos birakilamaz.";
+  final String _invalidMail = "Geçersiz email adresi";
+  final String _invalidPassword = "Sifre en az 6 karakter olmalı.";
 
   final _formKey = GlobalKey<FormState>();
+  FocusNode focusNode = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+  FocusNode focusNode3 = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint(ref.watch(userViewModelProvider).state.toString());
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //Header
-                const HeaderWidget(),
+                const SizedBox(height: 20),
+                const Center(
+                  child: SizedBox(
+                      height: 200,
+                      width: 200,
+                      child:
+                          Image(image: AssetImage('assets/images/logo.jpeg'))),
+                ),
+                Text(
+                  _signUpButtonText,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 20),
                 SingleChildScrollView(
                   child: Form(
@@ -38,12 +58,12 @@ class SignInPage extends ConsumerWidget {
                     child: Column(
                       children: [
                         //username formfield
-                        usernameFormfield(),
+                        usernameFormfield(context),
                         //email formfield
-                        emailFormfield(),
+                        emailFormfield(context),
 
                         // password formfield
-                        passwordFormfield(),
+                        passwordFormfield(context),
 
                         const SizedBox(height: 20),
                         CustomButton(
@@ -62,9 +82,10 @@ class SignInPage extends ConsumerWidget {
         ));
   }
 
-  TextFormField passwordFormfield() {
+  TextFormField passwordFormfield(BuildContext context) {
     return TextFormField(
-      autofocus: true,
+      focusNode: focusNode3,
+      initialValue: "1234555",
       obscureText: true,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -76,16 +97,21 @@ class SignInPage extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
             child: Icon(Icons.lock_outline_rounded),
           )),
+      validator: (value) => value!.length < 6 ? _invalidPassword : null,
+      onFieldSubmitted: (value) {
+        focusNode3.unfocus();
+      },
       onSaved: (String? gelenSifre) {
         _password = gelenSifre!;
       },
     );
   }
 
-  TextFormField emailFormfield() {
+  TextFormField emailFormfield(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode2,
+      initialValue: "kaplan@kaplan.com",
       keyboardType: TextInputType.emailAddress,
-      autofocus: true,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           contentPadding:
@@ -96,15 +122,28 @@ class SignInPage extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
             child: Icon(Icons.mail_outline_rounded),
           )),
+      validator: (String? mail) {
+        if (mail == "") {
+          return _canNotNilText;
+        } else {
+          if (!mail!.contains("@")) {
+            return _invalidMail;
+          }
+        }
+      },
+      onFieldSubmitted: (value) {
+        focusNode2.unfocus();
+        FocusScope.of(context).requestFocus(focusNode3);
+      },
       onSaved: (String? gelenMail) {
         _email = gelenMail!;
       },
     );
   }
 
-  TextFormField usernameFormfield() {
+  TextFormField usernameFormfield(BuildContext context) {
     return TextFormField(
-      autofocus: true,
+      focusNode: focusNode,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           contentPadding:
@@ -115,6 +154,12 @@ class SignInPage extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
             child: Icon(Icons.person),
           )),
+      validator: (String? username) {
+        return username != "" ? null : "Username bos olamaz!!";
+      },
+      onFieldSubmitted: (value) {
+        focusNode.unfocus();
+      },
       onSaved: (String? username) {
         _username = username!;
       },
@@ -122,14 +167,15 @@ class SignInPage extends ConsumerWidget {
   }
 
   saveUser(BuildContext context, WidgetRef ref) async {
-    _formKey.currentState?.save();
-    await ref
-        .read(userViewModelProvider)
-        .createUserWithEmailAndPassword(_email, _password, _username);
-    debugPrint(ref.read(userProvider)!.id);
-    //Navigator.popAndPushNamed(context, '/RouterPage');
-    // ignore: use_build_context_synchronously
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      var createdUser = await ref
+          .read(userViewModelProvider)
+          .createUserWithEmailAndPassword(_email, _password, _username);
+      if (createdUser != null) {
+        // ignore: use_build_context_synchronously
+        Navigator.popAndPushNamed(context, '/RouterPage');
+      }
+    }
   }
 }
