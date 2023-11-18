@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
 import 'package:hatimtakipflutter/Views/Widgets/header.dart';
+import 'package:hatimtakipflutter/Views/authentication/resetpasspage.dart';
 import 'package:hatimtakipflutter/Views/authentication/signinpage.dart';
+import 'package:hatimtakipflutter/riverpod/providers.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   late String _email, _password;
   final String _emailLabelText = "E-mail";
   final String _emailHintText = 'E-mailinizi giriniz.';
@@ -20,11 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   final String _haveUaccountText = "Hesabınız yok mu?";
   final String _signUpButtonText = "Kaydolun";
   final String _loginButtonText = "Giriş Yap";
+  final String _canNotNilText = "Bu alan bos birakilamaz.";
   final String _invalidMail = "Geçersiz email adresi";
   final String _invalidPassword = "Sifre en az 6 karakter olmalı.";
-  final String _canNotNilText = "Bu alan bos birakilamaz.";
+  final String _resetPassButtonText = "Şifremi unuttum";
 
   final _formKey = GlobalKey<FormState>();
+  FocusNode focusNode = FocusNode();
   FocusNode focusNode2 = FocusNode();
   FocusNode focusNode3 = FocusNode();
 
@@ -36,9 +41,12 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 20),
                 //Header
-                const SizedBox(height: 350, child: HeaderWidget()),
+                const SizedBox(height: 300, child: HeaderWidget()),
+
                 const SizedBox(height: 20),
                 SingleChildScrollView(
                   child: Form(
@@ -51,18 +59,27 @@ class _LoginPageState extends State<LoginPage> {
                         // password formfield
                         passwordFormfield(context),
 
-                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            resetPassButton(context),
+                          ],
+                        ),
                         CustomButton(
-                            btnText: _loginButtonText, onPressed: () {}),
+                            btnText: _loginButtonText,
+                            onPressed: () async {
+                              _login(context);
+                            }),
                         const SizedBox(height: 20),
+
                         const Text("&"),
 
                         //signIn anonymously
-                        signInAnonymoslyButton(),
+                        signInAnonymoslyButton(context),
 
                         const SizedBox(height: 20),
 
-                        doYouHaveAccountButton()
+                        doYouHaveAccountButton(context)
                       ],
                     ),
                   ),
@@ -73,23 +90,13 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Row doYouHaveAccountButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(_haveUaccountText),
-        TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignInPage()));
-            },
-            child: Text(_signUpButtonText))
-      ],
-    );
-  }
-
-  TextButton signInAnonymoslyButton() {
-    return TextButton(onPressed: () {}, child: Text(_signInAnonymouslyText));
+  TextButton resetPassButton(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+        },
+        child: Text(_resetPassButtonText));
   }
 
   TextFormField passwordFormfield(BuildContext context) {
@@ -140,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
             return _invalidMail;
           }
         }
+        return null;
       },
       onFieldSubmitted: (value) {
         focusNode2.unfocus();
@@ -149,5 +157,50 @@ class _LoginPageState extends State<LoginPage> {
         _email = gelenMail!;
       },
     );
+  }
+
+  Row doYouHaveAccountButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(_haveUaccountText),
+        TextButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignInPage()));
+            },
+            child: Text(_signUpButtonText))
+      ],
+    );
+  }
+
+  TextButton signInAnonymoslyButton(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+          var createdUser =
+              await ref.read(userViewModelProvider).signInWithAnonymously();
+          if (createdUser != null) {
+            // ignore: use_build_context_synchronously
+            if (mounted) {
+              Navigator.of(context).popAndPushNamed("/RouterPage");
+            }
+          }
+        },
+        child: Text(_signInAnonymouslyText));
+  }
+
+  _login(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      var createdUser = await ref
+          .read(userViewModelProvider)
+          .signInWithEmailAndPassword(_email, _password);
+      if (createdUser != null) {
+        // ignore: use_build_context_synchronously
+        if (mounted) {
+          Navigator.of(context).popAndPushNamed("/RouterPage");
+        }
+      }
+    }
   }
 }

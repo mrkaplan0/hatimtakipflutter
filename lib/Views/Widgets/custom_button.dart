@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
   final Color buttonBgColor;
   final Color buttonBorderColor;
   final Color? textColor;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const CustomButton({
     super.key,

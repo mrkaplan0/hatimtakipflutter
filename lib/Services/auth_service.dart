@@ -13,7 +13,10 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
   MyUser? myUser;
 
   MyUser _usersFromFirebase(User user) {
-    return MyUser(id: user.uid, email: user.email ?? "", username: "");
+    return MyUser(
+        id: user.uid,
+        email: user.email ?? "",
+        username: user.displayName ?? "");
   }
 
   @override
@@ -33,6 +36,7 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
       String email, String password, String username) async {
     UserCredential sonuc = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
+    await sonuc.user?.updateDisplayName(username);
     return _usersFromFirebase(sonuc.user!);
   }
 
@@ -43,7 +47,7 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
   }
 
   @override
-  Future<MyUser> signInWithEmailAndPassword(
+  Future<MyUser?> signInWithEmailAndPassword(
       String email, String password) async {
     UserCredential sonuc = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -55,6 +59,17 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
   Future<bool> signOut() async {
     try {
       await _auth.signOut();
+      return true;
+    } catch (e) {
+      debugPrint("Hata SignOut $e");
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
       return true;
     } catch (e) {
       debugPrint("Hata SignOut $e");

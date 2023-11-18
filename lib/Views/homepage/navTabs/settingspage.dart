@@ -13,18 +13,37 @@ class SettingsPage extends ConsumerWidget {
         appBar: AppBar(
           title: const Text("Ayarlar"),
         ),
-        body: Column(
-          children: [
-            CustomButton(
-                btnText: signOutbtnText,
-                onPressed: () {
-                  ref.watch(userViewModelProvider).signOut().then((value) {
-                    if (value == true) {
-                      Navigator.popAndPushNamed(context, "/RouterPage");
-                    }
-                  });
-                })
-          ],
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CustomButton(
+                  btnText: signOutbtnText,
+                  onPressed: () async {
+                    await ref
+                        .watch(userViewModelProvider)
+                        .signOut()
+                        .then((value) {
+                      goToRouterPage(value, context);
+                    });
+                  }),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          ),
         ));
+  }
+
+  void goToRouterPage(bool value, BuildContext context) {
+    if (value == true) {
+      try {
+        Navigator.popAndPushNamed(context, "/RouterPage");
+      } on Exception catch (e) {
+        print(e);
+        // TODO
+      }
+    }
   }
 }

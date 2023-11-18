@@ -15,10 +15,11 @@ class RouterPage extends ConsumerWidget {
 
     if (ref.watch(userViewModelProvider.notifier).state == ViewState.Idle) {
       if (user == null) {
-        return const LoginPage();
+        debugPrint("router null user");
+        return LoginPage();
       } else if (user.username == "") {
         debugPrint("router isimisz user $user");
-        return const AddUsernamePage();
+        return AddUsernamePage();
       } else {
         debugPrint("router home user $user");
         return const HomePage();

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Services/auth_service.dart';
 import 'package:hatimtakipflutter/Services/delegate/auth_delegate.dart';
-import 'package:hatimtakipflutter/Services/delegate/database_delegate.dart';
 import 'package:hatimtakipflutter/Services/firestore_service.dart';
 
 enum ViewState { Idle, Busy }
@@ -72,20 +70,74 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
 
   @override
   Future<MyUser?> signInWithAnonymously() async {
-    // TODO: implement signInWithAnonymously
-    throw UnimplementedError();
+    try {
+      state = ViewState.Busy;
+      _myUser = await authService.signInWithAnonymously();
+      if (_myUser != null) {
+        bool result = await firestoreService.saveMyUser(_myUser!);
+
+        if (result == true) {
+          _myUser = await firestoreService.readMyUser(_myUser!.id);
+        }
+      }
+      return _myUser;
+    } catch (e) {
+      debugPrint("User Model signin error :$e");
+      return null;
+    } finally {
+      state = ViewState.Idle;
+    }
   }
 
   @override
-  Future<MyUser> signInWithEmailAndPassword(
+  Future<MyUser?> signInWithEmailAndPassword(
       String email, String password) async {
-    // TODO: implement signInWithEmailAndPassword
-    throw UnimplementedError();
+    try {
+      state = ViewState.Busy;
+      _myUser = await authService.signInWithEmailAndPassword(email, password);
+      if (_myUser != null) {
+        _myUser = await firestoreService.readMyUser(_myUser!.id);
+      }
+      return _myUser;
+    } catch (e) {
+      debugPrint("User Model signin error :$e");
+      return null;
+    } finally {
+      state = ViewState.Idle;
+    }
   }
 
   @override
   Future<bool> signOut() async {
-    // TODO: implement signOut
-    throw UnimplementedError();
+    try {
+      state = ViewState.Busy;
+      bool sonuc = await authService.signOut();
+
+      _myUser = null;
+
+      return sonuc;
+    } catch (e) {
+      debugPrint("User Model signout error :$e");
+      return false;
+    } finally {
+      state = ViewState.Idle;
+    }
+  }
+
+  @override
+  Future<bool> resetPassword(String email) async {
+    try {
+      state = ViewState.Busy;
+      bool sonuc = await authService.resetPassword(email);
+
+      _myUser = null;
+
+      return sonuc;
+    } catch (e) {
+      debugPrint("User Model signout error :$e");
+      return false;
+    } finally {
+      state = ViewState.Idle;
+    }
   }
 }

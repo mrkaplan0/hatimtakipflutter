@@ -8,6 +8,7 @@ import 'package:hatimtakipflutter/Services/delegate/database_delegate.dart';
 class FirestoreService implements MyDatabaseDelegate {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
+  @override
   Future<bool> saveMyUser(MyUser user) async {
     try {
       await db
@@ -24,10 +25,10 @@ class FirestoreService implements MyDatabaseDelegate {
   Future<MyUser?> readMyUser(String userId) async {
     MyUser? user;
     try {
-      DocumentSnapshot _okunanUser =
+      DocumentSnapshot okunanUser =
           await db.collection('Users').doc(userId).get();
 
-      user = MyUser.fromJson(_okunanUser.data() as Map<String, dynamic>);
+      user = MyUser.fromJson(okunanUser.data() as Map<String, dynamic>);
 
       debugPrint("Okunan user nesnesi $user");
     } catch (e) {
@@ -41,13 +42,16 @@ class FirestoreService implements MyDatabaseDelegate {
     List<MyUser> userList = [];
     try {
       QuerySnapshot docs = await db.collection("Users").get();
+
       for (var user in docs.docs) {
         MyUser u = MyUser.fromJson(user.data() as Map<String, dynamic>);
+
         userList.add(u);
       }
     } catch (e) {
       print(e);
     }
+
     return userList;
   }
 
@@ -70,6 +74,7 @@ class FirestoreService implements MyDatabaseDelegate {
     return favoritesPeopleList;
   }
 
+  @override
   Future<bool> createNewHatim(Hatim newHatim) async {
     final docRefPrivateList =
         db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
@@ -249,6 +254,7 @@ class FirestoreService implements MyDatabaseDelegate {
     return true;
   }
 
+  @override
   Future<bool> updateRemainingPages(HatimPartModel part) async {
     final docRefPrivateList =
         db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
@@ -274,8 +280,9 @@ class FirestoreService implements MyDatabaseDelegate {
     return true;
   }
 
+  @override
   Future<List<Hatim>> fetchOnlyPublicHatims() async {
-    var hatimList = Set<Hatim>();
+    var hatimList = <Hatim>{};
     final docRefPublicList =
         db.collection('Hatimler').doc('MainLists').collection('PublicLists');
     try {

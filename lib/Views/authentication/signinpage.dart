@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hatimtakipflutter/Viewmodels/user_viewmodel.dart';
+import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
-import 'package:hatimtakipflutter/Views/Widgets/header.dart';
-import 'package:hatimtakipflutter/Views/homepage/homepage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
@@ -21,8 +19,13 @@ class SignInPage extends ConsumerWidget {
   final String _canNotNilText = "Bu alan bos birakilamaz.";
   final String _invalidMail = "Geçersiz email adresi";
   final String _invalidPassword = "Sifre en az 6 karakter olmalı.";
+  final String _usernameNotUsableText =
+      "Bu kullanici adi kullaniliyor! / \nKullanici adi alani bos birakilamaz.";
+  final String _usernameCanNotNilText = " Kullanici adi alani bos birakilamaz.";
+  List<MyUser> userList = [];
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _controller = TextEditingController();
   FocusNode focusNode = FocusNode();
   FocusNode focusNode2 = FocusNode();
   FocusNode focusNode3 = FocusNode();
@@ -30,6 +33,7 @@ class SignInPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint(ref.watch(userViewModelProvider).state.toString());
+    userList = ref.watch(fetchUsers).value ?? [];
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Padding(
@@ -58,7 +62,7 @@ class SignInPage extends ConsumerWidget {
                     child: Column(
                       children: [
                         //username formfield
-                        usernameFormfield(context),
+                        usernameFormfield(context, ref),
                         //email formfield
                         emailFormfield(context),
 
@@ -130,6 +134,7 @@ class SignInPage extends ConsumerWidget {
             return _invalidMail;
           }
         }
+        return null;
       },
       onFieldSubmitted: (value) {
         focusNode2.unfocus();
@@ -141,27 +146,30 @@ class SignInPage extends ConsumerWidget {
     );
   }
 
-  TextFormField usernameFormfield(BuildContext context) {
+  TextFormField usernameFormfield(BuildContext context, WidgetRef ref) {
     return TextFormField(
-      focusNode: focusNode,
+      controller: _controller,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           labelText: _usernameLabelText,
           hintText: _usernameHintText,
+          errorText: ref.watch(isUsernameNotAvailableProv) == true
+              ? _usernameNotUsableText
+              : null,
           suffixIcon: const Padding(
             padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
             child: Icon(Icons.person),
           )),
       validator: (String? username) {
-        return username != "" ? null : "Username bos olamaz!!";
+        return username != "" ? null : _usernameCanNotNilText;
       },
-      onFieldSubmitted: (value) {
-        focusNode.unfocus();
-      },
-      onSaved: (String? username) {
-        _username = username!;
+      onChanged: (value) {
+        ref.watch(isUsernameNotAvailableProv.notifier).state = userList.any(
+            (user) =>
+                user.username.trim().toLowerCase() ==
+                value.trim().toLowerCase());
       },
     );
   }

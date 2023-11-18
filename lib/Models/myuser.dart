@@ -12,14 +12,12 @@ class MyUser {
       this.userToken,
       this.favoritesPeople});
 
-  factory MyUser.fromJson(Map<String, dynamic> json) {
-    return MyUser(
-        id: json['id'],
-        email: json['email'],
-        username: json['username'],
-        userToken: json['userToken'],
-        favoritesPeople: json['favoritesPeople']);
-  }
+  MyUser.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        email = json['email'],
+        username = json['username'],
+        userToken = json['userToken'],
+        favoritesPeople = json['favoritesPeople'];
 
   Map<String, dynamic> toJson() {
     return {
