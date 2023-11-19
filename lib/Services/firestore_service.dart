@@ -111,7 +111,7 @@ class FirestoreService implements MyDatabaseDelegate {
               .set(usr.toJson(), SetOptions(merge: true));
           await db
               .collection('Users')
-              .doc(newHatim.createdBy.id)
+              .doc(newHatim.createdBy?.id)
               .collection('favoritesPeople')
               .doc(usr.id)
               .set(usr.toJson(), SetOptions(merge: true));

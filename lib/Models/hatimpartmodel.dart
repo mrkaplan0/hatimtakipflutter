@@ -1,7 +1,8 @@
 import 'package:hatimtakipflutter/Models/myuser.dart';
+import 'package:uuid/uuid.dart';
 
 class HatimPartModel {
-  String id;
+  String id = const Uuid().v4().toString();
   String hatimID;
   String hatimName;
   List<int> pages;

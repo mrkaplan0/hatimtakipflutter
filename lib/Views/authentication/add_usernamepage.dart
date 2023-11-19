@@ -15,7 +15,7 @@ class AddUsernamePage extends ConsumerWidget {
   final String _approveBtnText = "Onayla";
   List<MyUser> userList = [];
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

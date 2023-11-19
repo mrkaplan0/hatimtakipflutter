@@ -16,7 +16,7 @@ class ListsPage extends ConsumerWidget {
             TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HatimSettingPage()));
+                      builder: (context) => const HatimSettingPage()));
                 },
                 child: Text(_createNewHatimText))
           ],

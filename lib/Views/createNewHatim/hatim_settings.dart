@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hatimtakipflutter/Views/homepage/navTabs/individualspage.dart';
-import 'package:hatimtakipflutter/Views/homepage/navTabs/settingspage.dart';
+import 'package:hatimtakipflutter/Views/createNewHatim/0_hatimnamepage.dart';
+import 'package:hatimtakipflutter/Views/createNewHatim/1_selectindividualpage.dart';
+import 'package:hatimtakipflutter/Views/createNewHatim/2_hatimprivacypage.dart';
+import 'package:hatimtakipflutter/Views/createNewHatim/3_selectdatePage.dart';
+import 'package:hatimtakipflutter/Views/createNewHatim/4_cuzsettings.dart';
+import 'package:hatimtakipflutter/riverpod/providers.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class HatimSettingPage extends ConsumerStatefulWidget {
@@ -15,7 +19,6 @@ class HatimSettingPage extends ConsumerStatefulWidget {
 class _HatimSettingPageState extends ConsumerState<HatimSettingPage> {
   late PageController _pageController;
   final _currentPageNotifier = ValueNotifier<int>(0);
-  int _currentPageNum = 0;
 
   @override
   void initState() {
@@ -37,15 +40,14 @@ class _HatimSettingPageState extends ConsumerState<HatimSettingPage> {
         children: [
           PageView(
             allowImplicitScrolling: true,
-            children: _list,
             scrollDirection: Axis.horizontal,
-            controller: _pageController,
-            onPageChanged: (num) {
+            controller: ref.watch(myPageController.notifier).state,
+            onPageChanged: (number) {
               setState(() {
-                _currentPageNum = num;
-                _currentPageNotifier.value = num;
+                _currentPageNotifier.value = number;
               });
             },
+            children: _list,
           ),
           _buildCircleIndicator()
         ],
@@ -68,5 +70,11 @@ class _HatimSettingPageState extends ConsumerState<HatimSettingPage> {
     );
   }
 
-  final List<Widget> _list = <Widget>[SettingsPage(), IndividualPage()];
+  final List<Widget> _list = <Widget>[
+    HatimnamePage(),
+    SelectIndividualPage(),
+    HatimPrivacyPage(),
+    SelectDatePage(),
+    const CuzSettingsPage(),
+  ];
 }

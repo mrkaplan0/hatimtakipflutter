@@ -16,7 +16,7 @@ class RouterPage extends ConsumerWidget {
     if (ref.watch(userViewModelProvider.notifier).state == ViewState.Idle) {
       if (user == null) {
         debugPrint("router null user");
-        return LoginPage();
+        return const LoginPage();
       } else if (user.username == "") {
         debugPrint("router isimisz user $user");
         return AddUsernamePage();
