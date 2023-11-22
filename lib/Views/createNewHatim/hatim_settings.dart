@@ -75,6 +75,6 @@ class _HatimSettingPageState extends ConsumerState<HatimSettingPage> {
     SelectIndividualPage(),
     HatimPrivacyPage(),
     SelectDatePage(),
-    const CuzSettingsPage(),
+    CuzSettingsPage(),
   ];
 }

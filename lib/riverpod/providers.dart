@@ -33,5 +33,4 @@ final newHatimProvider = StateProvider<Hatim>((ref) => Hatim(
     partsOfHatimList: []));
 
 final hatimPartsProvider =
-    NotifierProvider<PartsOfHatimViewModel, List<HatimPartModel>>(
-        PartsOfHatimViewModel.new);
+    ChangeNotifierProvider((ref) => PartsOfHatimViewModel());

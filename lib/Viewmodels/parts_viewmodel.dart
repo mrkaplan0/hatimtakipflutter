@@ -5,18 +5,14 @@
 //  Created by MrKaplan on 30.08.23.
 //
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:uuid/uuid.dart';
 
-class PartsOfHatimViewModel extends Notifier<List<HatimPartModel>> {
-  @override
-  List<HatimPartModel> build() {
-    return allParts;
-  }
-
+class PartsOfHatimViewModel extends ChangeNotifier {
   List<List<int>> parts = [
     cuz1,
     cuz2,
@@ -85,11 +81,11 @@ class PartsOfHatimViewModel extends Notifier<List<HatimPartModel>> {
   final String pageBetweenText = "sayfalari arasi";
   final String pageText = "sayfa";
 
-  void updateAllPartsWithOwnersList(Hatim hatim, MyUser ownerOfPart) {
+  void updateAllParts(Hatim hatim) {
     for (int i = 0; i < 30; i++) {
       allParts[i].hatimID = hatim.id;
       allParts[i].hatimName = hatim.hatimName!;
-      allParts[i].ownerOfPart = ownerOfPart;
+      allParts[i].isPrivate = hatim.isPrivate;
       allParts[i].deadline = hatim.deadline;
     }
   }
@@ -113,10 +109,36 @@ class PartsOfHatimViewModel extends Notifier<List<HatimPartModel>> {
 
   void updateOwnerOfPart(int indexOfselectedPart, MyUser ownerOfPart) {
     allParts[indexOfselectedPart].ownerOfPart = ownerOfPart;
+    notifyListeners();
   }
 
   void sortList() {
     allParts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+    notifyListeners();
+  }
+
+  void splitPart(int indexOfSelectedPart, int pagenumberWeSplitted) {
+    HatimPartModel newCreatedPart = HatimPartModel(
+        hatimID: "",
+        hatimName: "",
+        pages: [],
+        ownerOfPart: null,
+        remainingPages: [],
+        deadline: null,
+        isPrivate: false,
+        id: const Uuid().v4().toString());
+
+    for (var i = 0; i < pagenumberWeSplitted; i++) {
+      newCreatedPart.pages.add(allParts[indexOfSelectedPart].pages[i]);
+
+      newCreatedPart.remainingPages
+          .add(allParts[indexOfSelectedPart].remainingPages[i]);
+    }
+
+    allParts[indexOfSelectedPart].pages.removeRange(0, pagenumberWeSplitted);
+
+    allParts.insert(indexOfSelectedPart, newCreatedPart);
+    notifyListeners();
   }
 
   List<MyUser> createParticipantList() {
@@ -203,7 +225,7 @@ class PartsOfHatimViewModel extends Notifier<List<HatimPartModel>> {
     } else if (part.first == part.last) {
       return "${part.first.toString()}. sayfa";
     } else {
-      return "${part.first.toString()} - ${part.last.toString()}";
+      return "${part.first.toString()} - ${part.last.toString()} sayfalari arasi";
     }
   }
 }

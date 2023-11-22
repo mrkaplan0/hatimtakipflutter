@@ -5,6 +5,7 @@ import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 final dateChosenProv = StateProvider<bool>((ref) => false);
+final date = StateProvider<DateTime>((ref) => DateTime.now());
 
 // ignore: must_be_immutable
 class SelectDatePage extends ConsumerWidget {
@@ -48,13 +49,6 @@ class SelectDatePage extends ConsumerWidget {
               iWantToDeadline(context, ref)
             ],
             SizedBox(height: size / 3),
-            ElevatedButton(
-              onPressed: () {
-                ref.read(myPageController.notifier).state.jumpToPage(2);
-                print(ref.read(myPageController.notifier).state);
-              },
-              child: Text(nextButtonText),
-            ),
           ],
         ),
       ),
@@ -81,7 +75,11 @@ class SelectDatePage extends ConsumerWidget {
               width: 8,
             ),
             Expanded(
-                child: CustomButton(btnText: noButtonText, onPressed: () {})),
+                child: CustomButton(
+                    btnText: noButtonText,
+                    onPressed: () {
+                      ref.read(myPageController.notifier).state.jumpToPage(4);
+                    })),
           ],
         )
       ],
@@ -92,24 +90,21 @@ class SelectDatePage extends ConsumerWidget {
     return Column(
       children: [
         Text(timepickerInfoText),
-        ...[
-          GestureDetector(
-            child: Text(DateFormat.yMd().add_Hm().format(
-                ref.watch(newHatimProvider.notifier).state.deadline ??
-                    _selectedDate)),
-            onTap: () {
-              myDateTimePicker(context, ref);
-            },
-          )
-        ],
+        GestureDetector(
+          child: Text(ref.watch(date).isUtc == DateTime.now().isUtc
+              ? ""
+              : DateFormat.yMd().add_Hm().format(ref.watch(date))),
+          onTap: () {
+            myDateTimePicker(context, ref);
+          },
+        ),
         const SizedBox(
           height: 20,
         ),
         CustomButton(
             btnText: completeProcessButtonText,
             onPressed: () {
-              print(ref.read(newHatimProvider.notifier).state.toJson());
-              ref.read(hatimPartsProvider.notifier);
+              ref.invalidate(date);
               ref.read(myPageController.notifier).state.jumpToPage(4);
             }),
         const SizedBox(
@@ -118,6 +113,7 @@ class SelectDatePage extends ConsumerWidget {
         CustomButton(
             btnText: cancelSelectAndContiueButtonText,
             onPressed: () {
+              ref.invalidate(date);
               ref.read(myPageController.notifier).state.jumpToPage(4);
             }),
       ],
@@ -127,8 +123,8 @@ class SelectDatePage extends ConsumerWidget {
   myDateTimePicker(BuildContext context, WidgetRef ref) {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      initialDate: DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now().add(const Duration(days: 1)),
       lastDate: DateTime(DateTime.now().year + 3),
     ).then((selectedDate) {
       // After selecting the date, display the time picker.
@@ -147,8 +143,10 @@ class SelectDatePage extends ConsumerWidget {
               selectedTime.hour,
               selectedTime.minute,
             );
+
+            ref.read(date.notifier).state = _selectedDate;
             ref.read(newHatimProvider).deadline = _selectedDate;
-            print(_selectedDate); // You can use the selectedDateTime as needed.
+            print(_selectedDate);
           }
         });
       }

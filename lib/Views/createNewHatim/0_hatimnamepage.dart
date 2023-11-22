@@ -45,7 +45,7 @@ class HatimnamePage extends ConsumerWidget {
                 contentPadding: const EdgeInsets.only(left: 8.0),
               ),
             ),
-            SizedBox(height: size / 3),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 ref.read(newHatimProvider).hatimName = _controller.text;
