@@ -204,7 +204,9 @@ class CuzSettingsPage extends ConsumerWidget {
 
       newHatim.partsOfHatimList = ref.read(hatimPartsProvider).allParts;
       ref.read(hatimPartsProvider).updateAllParts(newHatim);
-      print(newHatim.toJson());
+      newHatim.participantsList =
+          ref.read(hatimPartsProvider).createParticipantList();
+      newHatim.createdTime = DateTime.now();
 
       bool result = await ref.read(firestoreProvider).createNewHatim(newHatim);
 

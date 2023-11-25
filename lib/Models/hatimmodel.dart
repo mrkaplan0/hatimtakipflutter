@@ -23,22 +23,19 @@ class Hatim {
       required this.partsOfHatimList,
       this.createdTime});
 
-  factory Hatim.fromJson(Map<String, dynamic> json) {
-    return Hatim(
-      id: json['id'],
-      hatimName: json['hatimName'],
-      createdBy: MyUser.fromJson(json['createdBy']),
-      isIndividual: json['isIndividual'],
-      isPrivate: json['isPrivate'],
-      deadline:
-          json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
-      participantsList: List<MyUser>.from(
-          json['participantsList'].map((x) => MyUser.fromJson(x))),
-      partsOfHatimList: List<HatimPartModel>.from(
-          json['partsOfHatimList'].map((x) => HatimPartModel.fromJson(x))),
-      createdTime: DateTime.parse(json['createdTime']),
-    );
-  }
+  Hatim.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        hatimName = json['hatimName'],
+        createdBy = MyUser.fromJson(json['createdBy']),
+        isIndividual = json['isIndividual'],
+        isPrivate = json['isPrivate'],
+        deadline =
+            json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
+        participantsList = List<MyUser>.from(
+            json['participantsList'].map((x) => MyUser.fromJson(x))),
+        partsOfHatimList = List<HatimPartModel>.from(
+            json['partsOfHatimList'].map((x) => HatimPartModel.fromJson(x))),
+        createdTime = DateTime.parse(json['createdTime']);
 
   Map<String, dynamic> toJson() {
     return {

@@ -145,6 +145,7 @@ class FirestoreService implements MyDatabaseDelegate {
 
       for (var doc in querySnap.docs) {
         var hatim = Hatim.fromJson(doc.data());
+
         hatimList.add(hatim);
       }
     } catch (error) {
@@ -158,6 +159,7 @@ class FirestoreService implements MyDatabaseDelegate {
 
       for (var doc in querySnap.docs) {
         var hatim = Hatim.fromJson(doc.data());
+
         hatimList.add(hatim);
       }
     } catch (error) {

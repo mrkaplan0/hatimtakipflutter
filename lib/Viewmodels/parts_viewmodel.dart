@@ -6,7 +6,6 @@
 //
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
@@ -148,6 +147,7 @@ class PartsOfHatimViewModel extends ChangeNotifier {
         participantList.add(item.ownerOfPart!);
       }
     }
+    print("participant list" + participantList.toString());
     return participantList.toList();
   }
 
