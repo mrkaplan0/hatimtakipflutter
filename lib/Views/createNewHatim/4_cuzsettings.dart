@@ -75,6 +75,8 @@ class CuzSettingsPage extends ConsumerWidget {
                                             builder: (context) =>
                                                 AddUserToHatimPage(
                                                   selectedPartIndex: i,
+                                                  fromPage:
+                                                      FromPage.cuzSettings,
                                                 )));
                                   },
                                   child: Text(list[i].ownerOfPart != null
@@ -213,6 +215,7 @@ class CuzSettingsPage extends ConsumerWidget {
       if (result) {
         ref.invalidate(newHatimProvider);
         ref.invalidate(hatimPartsProvider);
+        ref.invalidate(fetchHatims);
         // ignore: use_build_context_synchronously
         Navigator.popAndPushNamed(context, '/RouterPage');
       }

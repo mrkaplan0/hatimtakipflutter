@@ -42,7 +42,6 @@ class SettingsPage extends ConsumerWidget {
         Navigator.popAndPushNamed(context, "/RouterPage");
       } on Exception catch (e) {
         print(e);
-        // TODO
       }
     }
   }

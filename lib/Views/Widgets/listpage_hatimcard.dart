@@ -39,14 +39,20 @@ class ListpageHatimCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Hatim adı : ${hatim.hatimName}"),
-                  Text(
-                      "Bitiş Tarihi : ${ListCardMetods.returnDeadline(hatim.deadline)}"),
-                ],
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hatim adı : ${hatim.hatimName}",
+                      overflow: TextOverflow.clip,
+                      softWrap: true,
+                    ),
+                    Text(
+                        "Bitiş Tarihi : ${ListCardMetods.returnDeadline(hatim.deadline)}"),
+                  ],
+                ),
               ),
             ],
           ),

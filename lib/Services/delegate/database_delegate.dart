@@ -11,8 +11,7 @@ abstract class MyDatabaseDelegate {
   Future<bool> deleteHatim(Hatim hatim);
   Future<List<Hatim>> readHatimList(MyUser user);
   Future<List<HatimPartModel>> fetchHatimParts(Hatim hatim);
-  Future<bool> updateOwnerOfPart(
-      MyUser newOwner, HatimPartModel part, Hatim hatim);
+  Future<bool> updateOwnerOfPart(MyUser newOwner, HatimPartModel part);
   Future<bool> updateRemainingPages(HatimPartModel part);
   Future<List<Hatim>> fetchOnlyPublicHatims();
   Future<List<HatimPartModel>> fetchOnlyFreiPartsOfPublicHatims(Hatim hatim);

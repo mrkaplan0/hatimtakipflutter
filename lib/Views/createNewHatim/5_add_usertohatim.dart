@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
-final filteredUsers = StateProvider<List<MyUser>>((ref) {
+final filteredUsers = StateProvider.autoDispose<List<MyUser>>((ref) {
   List<MyUser> filteredUsers = [];
   return filteredUsers;
 });
 
+// coming here
+// from cuzSettings -> to add
+// from detailsPage -> to update
+enum FromPage { cuzSettings, hatimDetails }
+
 // ignore: must_be_immutable
 class AddUserToHatimPage extends ConsumerWidget {
+  FromPage fromPage;
   int selectedPartIndex;
-  AddUserToHatimPage({super.key, required this.selectedPartIndex});
+  HatimPartModel? part;
+  AddUserToHatimPage(
+      {super.key,
+      required this.selectedPartIndex,
+      required this.fromPage,
+      this.part});
+
   List<MyUser> userList = [];
   final String _addUserToHatimTitle = "Katılımcı Ekle";
   final String _searchHintText = "Katılımcı ara...";
@@ -36,7 +49,6 @@ class AddUserToHatimPage extends ConsumerWidget {
                   filterUsers(ref, value);
                 },
                 decoration: InputDecoration(
-                  // labelText: _searchLabel,
                   hintText: _searchHintText,
                 )),
           ),
@@ -45,10 +57,16 @@ class AddUserToHatimPage extends ConsumerWidget {
               itemCount: ref.watch(filteredUsers).length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    ref.read(hatimPartsProvider).updateOwnerOfPart(
-                        selectedPartIndex, ref.watch(filteredUsers)[index]);
-                    ref.invalidate(filteredUsers);
+                  onTap: () async {
+                    if (fromPage == FromPage.cuzSettings) {
+                      ref.read(hatimPartsProvider).updateOwnerOfPart(
+                          selectedPartIndex, ref.watch(filteredUsers)[index]);
+                    } else if (fromPage == FromPage.hatimDetails) {
+                      await ref.read(firestoreProvider).updateOwnerOfPart(
+                          ref.watch(filteredUsers)[index], part!);
+                      ref.invalidate(fetchHatimParts);
+                    }
+
                     Navigator.pop(context);
                   },
                   child: ListTile(
@@ -66,10 +84,17 @@ class AddUserToHatimPage extends ConsumerWidget {
             children: [
               for (int i = 0; i < favoritesPeople.length; i++) ...[
                 ElevatedButton(
-                    onPressed: () {
-                      ref.read(hatimPartsProvider).updateOwnerOfPart(
-                          selectedPartIndex, favoritesPeople[i]);
-                      ref.invalidate(filteredUsers);
+                    onPressed: () async {
+                      if (fromPage == FromPage.cuzSettings) {
+                        ref.read(hatimPartsProvider).updateOwnerOfPart(
+                            selectedPartIndex, favoritesPeople[i]);
+                      } else if (fromPage == FromPage.hatimDetails) {
+                        await ref
+                            .read(firestoreProvider)
+                            .updateOwnerOfPart(favoritesPeople[i], part!);
+                        ref.invalidate(fetchHatimParts);
+                      }
+
                       Navigator.pop(context);
                     },
                     child: Text(favoritesPeople[i].username))

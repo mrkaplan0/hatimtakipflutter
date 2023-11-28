@@ -229,23 +229,22 @@ class FirestoreService implements MyDatabaseDelegate {
   }
 
   @override
-  Future<bool> updateOwnerOfPart(
-      MyUser newOwner, HatimPartModel part, Hatim hatim) async {
+  Future<bool> updateOwnerOfPart(MyUser newOwner, HatimPartModel part) async {
     final docRefPrivateList =
         db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
     final docRefPublicList =
         db.collection('Hatimler').doc('MainLists').collection('PublicLists');
     try {
       final userDict = newOwner.toJson();
-      if (hatim.isPrivate == true) {
+      if (part.isPrivate == true) {
         await docRefPrivateList
-            .doc(hatim.id)
+            .doc(part.hatimID)
             .collection('Parts')
             .doc(part.id)
             .update({'ownerOfPart': userDict});
       } else {
         await docRefPublicList
-            .doc(hatim.id)
+            .doc(part.hatimID)
             .collection('Parts')
             .doc(part.id)
             .update({'ownerOfPart': userDict});

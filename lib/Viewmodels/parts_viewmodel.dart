@@ -147,7 +147,7 @@ class PartsOfHatimViewModel extends ChangeNotifier {
         participantList.add(item.ownerOfPart!);
       }
     }
-    print("participant list" + participantList.toString());
+
     return participantList.toList();
   }
 
