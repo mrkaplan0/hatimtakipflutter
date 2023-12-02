@@ -65,7 +65,7 @@ class CuzSettingsPage extends ConsumerWidget {
                             children: [
                               Text((i + 1).toString()),
                               Text(ref
-                                  .read(hatimPartsProvider.notifier)
+                                  .read(hatimPartsProvider)
                                   .setPartName(list[i].pages)),
                               TextButton(
                                   onPressed: () {

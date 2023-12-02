@@ -256,6 +256,51 @@ class FirestoreService implements MyDatabaseDelegate {
   }
 
   @override
+  Future<List<HatimPartModel>> fetchIndividualParts(
+      List<Hatim> hatimList, MyUser myUser) async {
+    List<HatimPartModel> partslist = [];
+    final docRefPrivateList = FirebaseFirestore.instance
+        .collection("Hatimler")
+        .doc("MainLists")
+        .collection("PrivateLists");
+    final docRefPublicList = FirebaseFirestore.instance
+        .collection("Hatimler")
+        .doc("MainLists")
+        .collection("PublicLists");
+
+    try {
+      for (var hatim in hatimList) {
+        if (hatim.isPrivate == true) {
+          final querySnap = await docRefPrivateList
+              .doc(hatim.id)
+              .collection("Parts")
+              .where("ownerOfPart", isEqualTo: myUser.toJson())
+              .get();
+          for (var doc in querySnap.docs) {
+            final part = HatimPartModel.fromJson(doc.data());
+            partslist.add(part);
+          }
+        } else {
+          final querySnap = await docRefPublicList
+              .doc(hatim.id)
+              .collection("Parts")
+              .where("ownerOfPart", isEqualTo: myUser.toJson())
+              .get();
+          for (var doc in querySnap.docs) {
+            final part = HatimPartModel.fromJson(doc.data());
+            partslist.add(part);
+          }
+        }
+      }
+    } catch (error) {
+      return [];
+    }
+    print(" db calisti");
+    partslist.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+    return partslist;
+  }
+
+  @override
   Future<bool> updateRemainingPages(HatimPartModel part) async {
     final docRefPrivateList =
         db.collection('Hatimler').doc('MainLists').collection('PrivateLists');

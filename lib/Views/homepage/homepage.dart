@@ -48,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   final List<Widget> _pages = [
     const ListsPage(),
-    const IndividualPage(),
+    IndividualPage(),
     const ReadingPage(),
     const PrayAndQuranPage(),
     const SettingsPage()

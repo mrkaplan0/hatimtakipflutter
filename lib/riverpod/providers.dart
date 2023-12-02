@@ -5,6 +5,7 @@ import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Services/auth_service.dart';
 import 'package:hatimtakipflutter/Services/firestore_service.dart';
+import 'package:hatimtakipflutter/Viewmodels/individualpage_viewmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/parts_viewmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/user_viewmodel.dart';
 import 'package:uuid/uuid.dart';
@@ -45,6 +46,40 @@ final fetchHatims = FutureProvider<List<Hatim>>((ref) async => await ref
     .read(firestoreProvider)
     .readHatimList(ref.read(userViewModelProvider).user!));
 
+// for fetching parts of Hatim
 final fetchHatimParts = FutureProviderFamily<List<HatimPartModel>, Hatim>(
     (ref, hatim) async =>
         await ref.read(firestoreProvider).fetchHatimParts(hatim));
+
+// for fetching user`s parts
+final getMyIndividualParts = FutureProvider<List<HatimPartModel>>((ref) async {
+  var hatimsasync = ref.read(fetchHatims).asData?.valueOrNull;
+  var myUser = ref.read(userViewModelProvider).user;
+
+  List<HatimPartModel> myIndiviParts = await ref
+      .read(firestoreProvider)
+      .fetchIndividualParts(hatimsasync!, myUser!);
+
+  return myIndiviParts;
+});
+
+// for listening myIndividualParts and reducing reading counts from database
+final myIndividualParts = StateProvider<List<HatimPartModel>>((ref) {
+  var myIndiviParts = ref.watch(getMyIndividualParts);
+  List<HatimPartModel> myParts = [];
+  myIndiviParts.whenData((parts) {
+    myParts = parts;
+  });
+  return myParts;
+});
+
+final butnActvateListProv =
+    StateNotifierProvider.family.autoDispose<IndiviPageViewModel, bool, int>(
+  (ref, arg) {
+    return IndiviPageViewModel(false);
+  },
+);
+
+final updateRemainingPagesProv = FutureProviderFamily<bool, HatimPartModel>(
+    (ref, part) async =>
+        await ref.read(firestoreProvider).updateRemainingPages(part));
