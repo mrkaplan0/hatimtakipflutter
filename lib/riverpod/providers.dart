@@ -10,6 +10,9 @@ import 'package:hatimtakipflutter/Viewmodels/parts_viewmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/user_viewmodel.dart';
 import 'package:uuid/uuid.dart';
 
+//homepage tabview index provider
+final navigationIndexProvider = StateProvider<int>((ref) => 0);
+
 final authServiceProvider =
     Provider<FirebaseAuthService>((ref) => FirebaseAuthService());
 
@@ -26,7 +29,7 @@ final fetchUsers = FutureProvider<List<MyUser>>((ref) async {
 
 final isUsernameNotAvailableProv = StateProvider<bool>((ref) => false);
 
-// for tabview in homepage.dart
+// for tabview in hatim settings
 final pageControllerProv = Provider<PageController>((ref) => PageController());
 final myPageController =
     StateProvider<PageController>((ref) => ref.read(pageControllerProv));
@@ -83,3 +86,6 @@ final butnActvateListProv =
 final updateRemainingPagesProv = FutureProviderFamily<bool, HatimPartModel>(
     (ref, part) async =>
         await ref.read(firestoreProvider).updateRemainingPages(part));
+
+final onlyPublicHatims = FutureProvider(
+    (ref) async => await ref.read(firestoreProvider).fetchOnlyPublicHatims());

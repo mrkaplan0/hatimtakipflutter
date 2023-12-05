@@ -328,7 +328,7 @@ class FirestoreService implements MyDatabaseDelegate {
 
   @override
   Future<List<Hatim>> fetchOnlyPublicHatims() async {
-    var hatimList = <Hatim>{};
+    Set<Hatim> hatimList = <Hatim>{};
     final docRefPublicList =
         db.collection('Hatimler').doc('MainLists').collection('PublicLists');
     try {

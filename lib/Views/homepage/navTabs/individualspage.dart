@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:hatimtakipflutter/Views/homepage/navTabs/readingpage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,12 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 // ignore: must_be_immutable
 class IndividualPage extends ConsumerWidget {
   IndividualPage({super.key});
+
+  String noResponsibilityText =
+      "Sorumlu olduğunuz cüz yok.\n Başka hatimlere katılmak için tıkla.";
+  String seeOtherHatimsText = "Hatimleri Gör";
   final String indiviPageTitle = "Sorumlu Olduğun Cüzler";
+  final String remainingPageText = "Kalan Sayfalar";
   Timer? _timer;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,59 +28,90 @@ class IndividualPage extends ConsumerWidget {
       ),
       body: Consumer(builder: (context, ref, widget) {
         final list = ref.watch(myIndividualParts);
+        if (list.isNotEmpty) {
+          return listWidget(context, list, ref);
+        } else {
+          return listNullWidget(ref);
+        }
+      }),
+    );
+  }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Padding(
-              padding:
-                  EdgeInsets.only(right: MediaQuery.of(context).size.width / 7),
-              child: const Text("Kalan Sayfalar"),
-            ),
-            Flexible(
-              child: ListView.builder(
-                shrinkWrap: false,
-                itemCount: list.length,
-                itemBuilder: (context, i) {
-                  final showUndoButton = ref.watch(butnActvateListProv(i));
-                  return SizedBox(
-                    height: 120,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            partsInfoWidget(ref, list, i),
-                            Column(
-                              children: [
-                                showUndoButton == true
-                                    ? IconButton(
-                                        onPressed: () {
-                                          undoButtonAction(
-                                              list, i, ref, context);
-                                        },
-                                        icon: const Icon(
-                                            Icons.settings_backup_restore))
-                                    : const SizedBox(
-                                        height: 40,
-                                      ),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.menu_book_sharp)),
-                              ],
-                            ),
-                            reducingButton(ref, list, i),
-                          ],
+// if there is no element in list, navigate to user "Hatims Everone can join" => ReadingPage
+  Column listNullWidget(WidgetRef ref) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          noResponsibilityText,
+          textAlign: TextAlign.center,
+        ),
+        TextButton(
+            onPressed: () {
+              ref.watch(navigationIndexProvider.notifier).state = 2;
+            },
+            child: Text(seeOtherHatimsText))
+      ],
+    );
+  }
+
+//in list, we have a card. In Card you can reduce remainingPages and make undo.
+  Column listWidget(
+      BuildContext context, List<HatimPartModel> list, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Padding(
+          padding:
+              EdgeInsets.only(right: MediaQuery.of(context).size.width / 7),
+          child: Text(remainingPageText),
+        ),
+        Flexible(
+          child: ListView.builder(
+            shrinkWrap: false,
+            itemCount: list.length,
+            itemBuilder: (context, i) {
+              final showUndoButton = ref.watch(butnActvateListProv(i));
+              // if man finished to read part, there is no necessary to see this part`s card
+              return list[i].remainingPages.isNotEmpty
+                  ? SizedBox(
+                      height: 120,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              partsInfoWidget(ref, list, i),
+                              Column(
+                                children: [
+                                  showUndoButton == true
+                                      ? IconButton(
+                                          onPressed: () {
+                                            undoButtonAction(
+                                                list, i, ref, context);
+                                          },
+                                          icon: const Icon(
+                                              Icons.settings_backup_restore))
+                                      : const SizedBox(
+                                          height: 40,
+                                        ),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.menu_book_sharp)),
+                                ],
+                              ),
+                              reducingButton(ref, list, i),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      }),
+                    )
+                  : const SizedBox();
+            },
+          ),
+        ),
+      ],
     );
   }
 

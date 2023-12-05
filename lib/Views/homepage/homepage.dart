@@ -5,6 +5,7 @@ import 'package:hatimtakipflutter/Views/homepage/navTabs/listpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/prayandQuranpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/readingpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/settingspage.dart';
+import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -17,9 +18,10 @@ class _HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
+    ref.watch(navigationIndexProvider.notifier).state = index;
+    /*   setState(() {
       _selectedIndex = index;
-    });
+    }); */
   }
 
   @override
@@ -30,7 +32,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           selectedItemColor: Colors.cyan,
           unselectedLabelStyle: const TextStyle(color: Colors.grey),
           showUnselectedLabels: true,
-          currentIndex: _selectedIndex,
+          currentIndex: ref.watch(navigationIndexProvider),
           onTap: _onItemTapped,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.list), label: "Hatimler"),
@@ -42,14 +44,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: "Ayarlar"),
           ]),
-      body: _pages.elementAt(_selectedIndex),
+      body: _pages.elementAt(ref.watch(navigationIndexProvider)),
     );
   }
 
   final List<Widget> _pages = [
     const ListsPage(),
     IndividualPage(),
-    const ReadingPage(),
+    ReadingPage(),
     const PrayAndQuranPage(),
     const SettingsPage()
   ];
