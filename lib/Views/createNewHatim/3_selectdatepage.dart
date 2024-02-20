@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,13 +15,13 @@ class SelectDatePage extends ConsumerWidget {
   SelectDatePage({super.key});
 
   final String deadlineChosenInfoText =
-      "Hatimin icin bitis tarihi ayarlamak ister misin?";
-  final String timepickerInfoText = "Hatimin planlanan bitis tarihi:";
-  final String yesButtonText = "Evet";
-  final String noButtonText = "Hayir";
-  final String cancelSelectAndContiueButtonText = "Vazgeç ve Devam Et";
-  final String completeProcessButtonText = "Tamamla";
-  final String nextButtonText = "Sonraki";
+      tr("Hatimin icin bitis tarihi ayarlamak ister misin?");
+  final String timepickerInfoText = tr("Hatimin planlanan bitis tarihi:");
+  final String yesButtonText = tr("Evet");
+  final String noButtonText = tr("Hayir");
+  final String cancelSelectAndContiueButtonText = tr("Vazgec ve Devam Et");
+  final String completeProcessButtonText = tr("Tamamla");
+  final String nextButtonText = tr("Sonraki");
 
   DateTime _selectedDate = DateTime.now();
 

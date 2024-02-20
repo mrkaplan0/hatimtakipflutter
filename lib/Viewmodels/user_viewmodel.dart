@@ -4,10 +4,10 @@ import 'package:hatimtakipflutter/Services/auth_service.dart';
 import 'package:hatimtakipflutter/Services/delegate/auth_delegate.dart';
 import 'package:hatimtakipflutter/Services/firestore_service.dart';
 
-enum ViewState { Idle, Busy }
+enum ViewState { idle, busy }
 
 class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
-  ViewState _state = ViewState.Idle;
+  ViewState _state = ViewState.idle;
   MyUser? _myUser;
   FirebaseAuthService authService = FirebaseAuthService();
   FirestoreService firestoreService = FirestoreService();
@@ -27,7 +27,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
   @override
   Future<MyUser?> currentUser() async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       _myUser = await authService.currentUser();
       if (_myUser != null) {
         _myUser = await firestoreService.readMyUser(_myUser!.id);
@@ -40,7 +40,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
       debugPrint("Viewmodeldeki current user hata: $e");
       return null;
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
   }
 
@@ -48,7 +48,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
   Future<MyUser?> createUserWithEmailAndPassword(
       String email, String password, String username) async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       _myUser = await authService.createUserWithEmailAndPassword(
           email, password, username);
 
@@ -63,7 +63,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
     } catch (e) {
       debugPrint("Viewmodeldeki create user hata: $e");
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
     return _myUser;
   }
@@ -71,7 +71,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
   @override
   Future<MyUser?> signInWithAnonymously() async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       _myUser = await authService.signInWithAnonymously();
       if (_myUser != null) {
         bool result = await firestoreService.saveMyUser(_myUser!);
@@ -85,7 +85,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
       debugPrint("User Model signin error :$e");
       return null;
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
   }
 
@@ -93,7 +93,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
   Future<MyUser?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       _myUser = await authService.signInWithEmailAndPassword(email, password);
       if (_myUser != null) {
         _myUser = await firestoreService.readMyUser(_myUser!.id);
@@ -103,14 +103,14 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
       debugPrint("User Model signin error :$e");
       return null;
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
   }
 
   @override
   Future<bool> signOut() async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       bool sonuc = await authService.signOut();
 
       _myUser = null;
@@ -120,14 +120,14 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
       debugPrint("User Model signout error :$e");
       return false;
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
   }
 
   @override
   Future<bool> resetPassword(String email) async {
     try {
-      state = ViewState.Busy;
+      state = ViewState.busy;
       bool sonuc = await authService.resetPassword(email);
 
       _myUser = null;
@@ -137,7 +137,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
       debugPrint("User Model signout error :$e");
       return false;
     } finally {
-      state = ViewState.Idle;
+      state = ViewState.idle;
     }
   }
 }

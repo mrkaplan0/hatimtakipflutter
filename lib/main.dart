@@ -1,11 +1,29 @@
+import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hatimtakipflutter/Viewmodels/parts_viewmodel.dart';
 import 'package:hatimtakipflutter/routerpage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ProviderScope(child: MyApp()));
+  await EasyLocalization.ensureInitialized();
+  runApp(ProviderScope(
+    child: EasyLocalization(
+        supportedLocales: const [
+          Locale('en'),
+          Locale('tr'),
+          Locale('de'),
+          Locale('fr'),
+          Locale('ar')
+        ],
+        path:
+            'assets/translations', // <-- change the path of the translation files
+        fallbackLocale: const Locale('tr'),
+        // startLocale: PlatformDispatcher.instance.locale,
+        child: MyApp()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +31,9 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    PartsOfHatimViewModel.deviceLocale =
+        context.deviceLocale.toString().substring(0, 2);
+    print(PartsOfHatimViewModel.deviceLocale);
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,
@@ -25,6 +46,9 @@ class MyApp extends StatelessWidget {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
+            locale: context.locale,
             debugShowCheckedModeBanner: false,
             routes: {"/RouterPage": (context) => const RouterPage()},
             theme: ThemeData(

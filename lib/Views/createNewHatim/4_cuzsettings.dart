@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
@@ -12,17 +15,17 @@ final sliderValueProvider = StateProvider<double>((ref) => 0.0);
 // ignore: must_be_immutable
 class CuzSettingsPage extends ConsumerWidget {
   CuzSettingsPage({super.key});
-  String appBarTitle = 'Cüz Ayarları';
-  String splitBtnText = "Böl";
-  String closeBtnText = "Kapat";
-  String createHatimtext = "Hatmi Oluştur";
-  String waitingText = "Lütfen bekleyin...";
-  String changePrivacyButtonText = "Herkes Erişebilir";
-  String warningText = "Uyarı";
-  String controlDialogInfo =
-      "Bütün cüzlere kişi atayın ya da hatminizi 'Herkes' erişebilir hale getirin.";
-  String nonAddedPersonInfotext = "Kisi atanmayan cüz sayisi : ";
-  String addPersonText = "Kişi ata";
+  String appBarTitle = tr('Cüz Ayarlari');
+  String splitBtnText = tr("Bol");
+  String closeBtnText = tr("Kapat");
+  String createHatimtext = tr("Hatmi Olustur");
+  String waitingText = tr("Lutfen bekleyin...");
+  String changePrivacyButtonText = tr("Herkes Erisebilir");
+  String warningText = tr("Uyari");
+  String controlDialogInfo = tr(
+      "Bütün cüzlere kisi atayin ya da hatminizi 'Herkes' erisebilir hale getirin.");
+  String nonAddedPersonInfotext = tr("Kisi atanmayan cüz sayisi:");
+  String addPersonText = tr("Kisi ata");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,31 +67,42 @@ class CuzSettingsPage extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text((i + 1).toString()),
-                              Text(ref
-                                  .read(hatimPartsProvider)
-                                  .setPartName(list[i].pages)),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AddUserToHatimPage(
-                                                  selectedPartIndex: i,
-                                                  fromPage:
-                                                      FromPage.cuzSettings,
-                                                )));
-                                  },
-                                  child: Text(list[i].ownerOfPart != null
-                                      ? list[i].ownerOfPart!.username
-                                      : addPersonText))
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              Text(
+                                ref
+                                    .read(hatimPartsProvider)
+                                    .setPartName(list[i].pages),
+                                overflow: TextOverflow.clip,
+                                softWrap: true,
+                              ),
+                              Expanded(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddUserToHatimPage(
+                                                    selectedPartIndex: i,
+                                                    fromPage:
+                                                        FromPage.cuzSettings,
+                                                  )));
+                                    },
+                                    child: Text(
+                                      list[i].ownerOfPart != null
+                                          ? list[i].ownerOfPart!.username
+                                          : addPersonText,
+                                    )),
+                              )
                             ],
                           ),
                         ),
                       ),
                     );
                   }),
-              if (ref.watch(userViewModelProvider).state == ViewState.Busy) ...[
+              if (ref.watch(userViewModelProvider).state == ViewState.busy) ...[
                 Container(
                   height: double.infinity,
                   width: double.infinity,
@@ -126,7 +140,8 @@ class CuzSettingsPage extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('  Cüzü ${sliderValue.toInt()}. sayfadan böl.'),
+                        const Text('Cüzü sayfadan böl.')
+                            .tr(args: ["${sliderValue.toInt()}."]),
                         Slider(
                           value: sliderValue,
                           onChanged: (value) {
@@ -141,7 +156,7 @@ class CuzSettingsPage extends ConsumerWidget {
                         Row(
                           children: [
                             Expanded(
-                              // confirm the split button.
+                              //  the split confirm button.
                               child: CustomButton(
                                   btnText: splitBtnText,
                                   onPressed: () {
@@ -202,7 +217,7 @@ class CuzSettingsPage extends ConsumerWidget {
 
   void _saveHatim(BuildContext context, WidgetRef ref, Hatim newHatim) async {
     try {
-      ref.watch(userViewModelProvider.notifier).state = ViewState.Busy;
+      ref.watch(userViewModelProvider.notifier).state = ViewState.busy;
 
       newHatim.partsOfHatimList = ref.read(hatimPartsProvider).allParts;
       ref.read(hatimPartsProvider).updateAllParts(newHatim);
@@ -216,11 +231,12 @@ class CuzSettingsPage extends ConsumerWidget {
         ref.invalidate(newHatimProvider);
         ref.invalidate(hatimPartsProvider);
         ref.invalidate(fetchHatims);
+        ref.invalidate(myIndividualParts);
         // ignore: use_build_context_synchronously
         Navigator.popAndPushNamed(context, '/RouterPage');
       }
 
-      ref.watch(userViewModelProvider.notifier).state = ViewState.Idle;
+      ref.watch(userViewModelProvider.notifier).state = ViewState.idle;
     } catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,7 +246,7 @@ class CuzSettingsPage extends ConsumerWidget {
         ),
       );
     } finally {
-      ref.watch(userViewModelProvider.notifier).state = ViewState.Idle;
+      ref.watch(userViewModelProvider.notifier).state = ViewState.idle;
     }
   }
 
@@ -257,6 +273,7 @@ class CuzSettingsPage extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
+                        // ignore: prefer_interpolation_to_compose_strings
                         nonAddedPersonInfotext + "$nonAddedPersonToCuzCount",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),

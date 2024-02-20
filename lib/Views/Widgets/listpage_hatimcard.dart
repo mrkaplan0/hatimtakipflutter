@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/listpage_cardmetods.dart';
@@ -31,7 +32,7 @@ class ListpageHatimCard extends StatelessWidget {
                       value: rate,
                     ),
                     Text(
-                      hatim.hatimName != null
+                      hatim.hatimName != null && hatim.hatimName!.length > 1
                           ? hatim.hatimName!.toUpperCase().substring(0, 1)
                           : "",
                       style: const TextStyle(fontWeight: FontWeight.w700),
@@ -44,13 +45,14 @@ class ListpageHatimCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Hatim adı : ${hatim.hatimName}",
+                    const Text(
+                      "Hatim Adi:",
                       overflow: TextOverflow.clip,
                       softWrap: true,
-                    ),
-                    Text(
-                        "Bitiş Tarihi : ${ListCardMetods.returnDeadline(hatim.deadline)}"),
+                    ).tr(args: ["${hatim.hatimName}"]),
+                    const Text("Bitis Tarihi").tr(args: [
+                      (ListCardMetods.returnDeadline(hatim.deadline))
+                    ]),
                   ],
                 ),
               ),

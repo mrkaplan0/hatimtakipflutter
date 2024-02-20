@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:intl/intl.dart';
 
 class ListCardMetods {
   static String returnDeadline(DateTime? deadline) {
@@ -8,7 +8,7 @@ class ListCardMetods {
       var formattedDate = DateFormat.yMd().add_Hm().format(deadline);
       return formattedDate;
     } else {
-      return "Süre sınırı yok.";
+      return "Süre siniri yok.".tr();
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/listpage_hatimcard.dart';
@@ -6,15 +7,16 @@ import 'package:hatimtakipflutter/Views/detail_pages/hatim_detailpage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 class ListsPage extends ConsumerWidget {
-  const ListsPage({super.key});
-  final String _listpageTitle = "Hatimler";
-  final String _createNewHatimText = "Yeni Hatim Oluştur";
+  ListsPage({super.key});
+  final String _listpageTitle = tr("Hatimler");
+  final String _createNewHatimText = tr("Yeni Hatim Olustur");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hatims = ref.watch(fetchHatims);
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(_listpageTitle),
           actions: [_createNewHatimButton(context)],
         ),

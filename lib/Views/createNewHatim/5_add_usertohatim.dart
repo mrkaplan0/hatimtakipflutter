@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
@@ -26,8 +29,8 @@ class AddUserToHatimPage extends ConsumerWidget {
       this.part});
 
   List<MyUser> userList = [];
-  final String _addUserToHatimTitle = "Katılımcı Ekle";
-  final String _searchHintText = "Katılımcı ara...";
+  final String _addUserToHatimTitle = tr("Katilimci Ekle");
+  final String _searchHintText = tr("Katilimci ara...");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,6 +70,7 @@ class AddUserToHatimPage extends ConsumerWidget {
                       ref.invalidate(fetchHatimParts);
                     }
 
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                   },
                   child: ListTile(
@@ -95,6 +99,7 @@ class AddUserToHatimPage extends ConsumerWidget {
                         ref.invalidate(fetchHatimParts);
                       }
 
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     },
                     child: Text(favoritesPeople[i].username))
@@ -107,8 +112,6 @@ class AddUserToHatimPage extends ConsumerWidget {
   }
 
   void filterUsers(WidgetRef ref, String query) {
-    // Kullanıcı listesini filtrele
-    // Bu örnekte, kullanıcı adında girilen değeri içerenleri filtrele
     ref.read(filteredUsers.notifier).state = userList
         .where(
             (user) => user.username.toLowerCase().contains(query.toLowerCase()))

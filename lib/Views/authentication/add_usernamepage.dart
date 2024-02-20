@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
@@ -9,10 +10,10 @@ class AddUsernamePage extends ConsumerWidget {
   AddUsernamePage({super.key});
 
   final String _usernameNotUsableText =
-      "Bu kullanici adi kullaniliyor! / \nKullanici adi alani bos.";
-  final String _usernameCanNotNilText = " Kullanici adi alani bos birakilamaz.";
-  final String _usernameHintText = 'Kullanıcı adınızı giriniz.';
-  final String _approveBtnText = "Onayla";
+      tr("Bu kullanici adi kullaniliyor! / \nKullanici adi alani bos.");
+  final String _usernameCanNotNilText = tr(" Bu alan bos birakilamaz.");
+  final String _usernameHintText = tr('Kullanici adinizi giriniz.');
+  final String _approveBtnText = tr("Onayla");
   List<MyUser> userList = [];
 
   final TextEditingController _controller = TextEditingController();

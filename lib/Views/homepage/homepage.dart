@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/individualspage.dart';
@@ -15,13 +16,8 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     ref.watch(navigationIndexProvider.notifier).state = index;
-    /*   setState(() {
-      _selectedIndex = index;
-    }); */
   }
 
   @override
@@ -34,25 +30,27 @@ class _HomePageState extends ConsumerState<HomePage> {
           showUnselectedLabels: true,
           currentIndex: ref.watch(navigationIndexProvider),
           onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: "Hatimler"),
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.person), label: "Bireysel"),
+                icon: const Icon(Icons.list), label: "Hatimler".tr()),
             BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle), label: "Katıl"),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Dua"),
+                icon: const Icon(Icons.person), label: "Bireysel".tr()),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: "Ayarlar"),
+                icon: const Icon(Icons.add_circle), label: "Katil".tr()),
+            BottomNavigationBarItem(
+                icon: const Icon(Icons.menu_book), label: "duam".tr()),
+            BottomNavigationBarItem(
+                icon: const Icon(Icons.settings), label: "Ayarlar".tr()),
           ]),
       body: _pages.elementAt(ref.watch(navigationIndexProvider)),
     );
   }
 
   final List<Widget> _pages = [
-    const ListsPage(),
+    ListsPage(),
     IndividualPage(),
     ReadingPage(),
-    const PrayAndQuranPage(),
-    const SettingsPage()
+    PrayAndQuranPage(),
+    SettingsPage()
   ];
 }

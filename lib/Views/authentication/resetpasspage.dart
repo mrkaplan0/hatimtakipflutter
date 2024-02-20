@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
@@ -8,14 +9,14 @@ final isPassReset = StateProvider<bool>((ref) => false);
 class ResetPasswordPage extends ConsumerWidget {
   ResetPasswordPage({super.key});
 
-  final String _resetButtonText = "Şifreyi Sıfırlayın";
-  final String _emailLabelText = "E-mail";
-  final String _emailHintText = 'E-mailinizi giriniz.';
-  final String _invalidMail = "Geçersiz email adresi";
-  final String _canNotNilText = "Bu alan bos birakilamaz.";
-  final String _goBackButtonText = "Geri dön";
+  final String _resetButtonText = tr("Sifreyi Sifirlayin");
+  final String _emailLabelText = tr("Email");
+  final String _emailHintText = tr('Emailinizi giriniz.');
+  final String _invalidMail = tr("Gecersiz email adresi");
+  final String _canNotNilText = tr("Bu alan bos birakilamaz.");
+  final String _goBackButtonText = tr("Geri don");
   final String _weSendedEmailText =
-      "Size bir sifirlama maili gönderdik. E-mailinizi kontrol edin.";
+      tr("Size bir sifirlama maili gönderdik. E-mailinizi kontrol edin.");
 
   final TextEditingController _controllerEmail = TextEditingController();
 

@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
@@ -8,10 +11,10 @@ class HatimPrivacyPage extends ConsumerWidget {
   HatimPrivacyPage({super.key});
 
   bool isIndividual = false;
-  final String nextButtonText = "Sonraki";
-  final String makePrivatInfoText = "Hatime kimler erisebilsin?";
-  final String onlyChosenPersonButtonText = "Sadece Sectigim Kisiler";
-  final String publicAccessButtonText = "Herkes";
+  final String nextButtonText = tr("Sonraki");
+  final String makePrivatInfoText = tr("Hatime kimler erisebilsin?");
+  final String onlyChosenPersonButtonText = tr("Sadece Sectigim Kisiler");
+  final String publicAccessButtonText = tr("Herkes");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:hatimtakipflutter/Views/homepage/navTabs/readingpage.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hatimtakipflutter/Views/detail_pages/Quranpage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,24 +8,25 @@ import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/listpage_cardmetods.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 // ignore: must_be_immutable
 class IndividualPage extends ConsumerWidget {
   IndividualPage({super.key});
 
   String noResponsibilityText =
-      "Sorumlu olduğunuz cüz yok.\n Başka hatimlere katılmak için tıkla.";
-  String seeOtherHatimsText = "Hatimleri Gör";
-  final String indiviPageTitle = "Sorumlu Olduğun Cüzler";
-  final String remainingPageText = "Kalan Sayfalar";
+      tr("Sorumlu olduğunuz cüz yok.\n Başka hatimlere katilmak icin tikla.");
+  String seeOtherHatimsText = tr("Hatimleri Gör");
+  String indiviPageTitle = tr("Sorumlu Olduğun Cüzler");
+  String remainingPageText = tr("Kalan Sayfalar");
   Timer? _timer;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(indiviPageTitle),
+        automaticallyImplyLeading: false,
+        title: Text(
+          indiviPageTitle,
+          style: const TextStyle(fontSize: 20),
+        ),
       ),
       body: Consumer(builder: (context, ref, widget) {
         final list = ref.watch(myIndividualParts);
@@ -97,7 +99,13 @@ class IndividualPage extends ConsumerWidget {
                                           height: 40,
                                         ),
                                   IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) => QuranPage(
+                                                      part: list[i],
+                                                    )));
+                                      },
                                       icon: const Icon(Icons.menu_book_sharp)),
                                 ],
                               ),

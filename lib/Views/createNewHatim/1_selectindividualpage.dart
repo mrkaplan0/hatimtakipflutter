@@ -1,3 +1,5 @@
+// ignore: file_names
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
@@ -8,10 +10,10 @@ class SelectIndividualPage extends ConsumerWidget {
   SelectIndividualPage({super.key});
 
   bool isIndividual = false;
-  final String nextButtonText = "Sonraki";
-  final String individualInfoText = "Nasil bir hatim arzu ediyorsun?";
-  final String indiviButtonText = "Bireysel";
-  final String multiButtonText = "Cok katilimcili";
+  final String nextButtonText = tr("Sonraki");
+  final String individualInfoText = tr("Nasil bir hatim arzu ediyorsun?");
+  final String indiviButtonText = tr("Bireysel");
+  final String multiButtonText = tr("Cok katilimcili");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

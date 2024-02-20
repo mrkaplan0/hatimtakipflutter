@@ -1,14 +1,16 @@
 // ignore: must_be_immutable
+// ignore_for_file: file_names
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 class HatimnamePage extends ConsumerWidget {
   HatimnamePage({super.key});
-
-  final String hatimNametitle = "Hatminize bir isim verin.";
-  final String hatimNameexample = "Örnek: Ramazan Hatmi";
-  final String nextButtonText = "Sonraki";
+  final String hatimNametitle = tr("Hatminize bir isim verin.");
+  final String hatimNameexample = tr("Örnek: Ramazan Hatmi");
+  final String nextButtonText = tr("Sonraki");
 
   final TextEditingController _controller = TextEditingController();
 

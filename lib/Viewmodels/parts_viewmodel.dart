@@ -1,17 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 //
 //  partsOfHatimViewModel.dart
 //  hatimtakipapp
 //
 //  Created by MrKaplan on 30.08.23.
-//
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
-import 'package:uuid/uuid.dart';
 
 class PartsOfHatimViewModel extends ChangeNotifier {
+  static late String deviceLocale;
   List<List<int>> parts = [
     cuz1,
     cuz2,
@@ -76,9 +79,9 @@ class PartsOfHatimViewModel extends ChangeNotifier {
     c29,
     c30
   ];
-  final String partText = "Cüz";
-  final String pageBetweenText = "sayfalari arasi";
-  final String pageText = "sayfa";
+  final String partText = "Cüz".tr();
+  final String pageBetweenText = "sayfalari arasi".tr();
+  final String pageText = "sayfa".tr();
 
   void updateAllParts(Hatim hatim) {
     for (int i = 0; i < 30; i++) {
@@ -223,9 +226,24 @@ class PartsOfHatimViewModel extends ChangeNotifier {
     } else if (part.first == 581 && part.last == 603) {
       return "$partText 30";
     } else if (part.first == part.last) {
-      return "${part.first.toString()}. sayfa";
+      return "${part.first.toString()}. $pageText";
     } else {
-      return "${part.first.toString()} - ${part.last.toString()} sayfalari arasi";
+      switch (deviceLocale) {
+        case ("en"):
+          return " $pageBetweenText ${part.first.toString()} - ${part.last.toString()}";
+
+        case "de":
+          return " $pageBetweenText ${part.first.toString()} - ${part.last.toString()}";
+        case "fr":
+          return " $pageBetweenText ${part.first.toString()} - ${part.last.toString()}";
+        case "ar":
+          return "${part.first.toString()} - ${part.last.toString()} $pageBetweenText";
+        case "tr":
+          return "${part.first.toString()} - ${part.last.toString()} $pageBetweenText";
+
+        default:
+          return "${part.first.toString()} - ${part.last.toString()} $pageBetweenText";
+      }
     }
   }
 }

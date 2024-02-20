@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
@@ -11,17 +12,17 @@ final editfuncActivatePro = StateProvider.autoDispose<bool>((ref) => false);
 // ignore: must_be_immutable
 class HatimDetailsPage extends ConsumerWidget {
   Hatim hatim;
-  String editBtnText = "Kişileri Düzenle";
+  String editBtnText = tr("Kisileri Düzenle");
 
-  String deleteBtnText = "Hatmi Sil";
+  String deleteBtnText = tr("Hatmi Sil");
 
-  String editInfoSnackbarText = "Düzenlemek istediğiniz cüzü seçin.";
+  String editInfoSnackbarText = tr("Düzenlemek istediginiz cüzü secin.");
 
-  String cancelText = "İptal";
+  String cancelText = tr("Iptal");
 
-  String warningTitle = "Uyarı";
+  String warningTitle = tr("Uyari");
 
-  String warningInfo = " Hatmi silmek istediğinizden emin misiniz?";
+  String warningInfo = tr("Hatmi silmek istediginizden emin misiniz?");
   HatimDetailsPage({super.key, required this.hatim});
 
   @override
@@ -73,7 +74,11 @@ class HatimDetailsPage extends ConsumerWidget {
                                         .read(hatimPartsProvider.notifier)
                                         .setPartName(parts[i].pages)),
                                     Text(
-                                      "Okuyan: ${parts[i].ownerOfPart != null ? parts[i].ownerOfPart!.username : ""}",
+                                      "Okuyan:".tr(args: [
+                                        (parts[i].ownerOfPart != null
+                                            ? parts[i].ownerOfPart!.username
+                                            : "")
+                                      ]),
                                       overflow: TextOverflow.clip,
                                       softWrap: true,
                                     ),
@@ -147,7 +152,7 @@ class HatimDetailsPage extends ConsumerWidget {
   _popUpMenu(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<int>(
       itemBuilder: (context) => [
-        // popupmenu item 1 edit users
+        // popupmenu item 1: edit users
         PopupMenuItem(
           value: 1,
           child: Row(
@@ -172,7 +177,7 @@ class HatimDetailsPage extends ConsumerWidget {
             ));
           },
         ),
-        // popupmenu item 2 delete hatim
+        // popupmenu item 2: delete hatim
         PopupMenuItem(
           value: 2,
           child: Row(

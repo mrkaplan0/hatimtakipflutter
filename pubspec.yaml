@@ -37,14 +37,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.4.5
   hooks_riverpod: ^2.4.9
-  firebase_auth: ^4.13.0
+  firebase_auth: ^4.15.1
   cloud_firestore: ^4.13.0
-  firebase_core: ^2.22.0
-  firebase_analytics: ^10.6.4
+  firebase_core: ^2.24.1
+  firebase_analytics: ^10.7.3
   page_view_indicators: ^2.0.0
   intl: ^0.18.1
   uuid: ^4.2.1
   flutter_slidable: ^3.0.1
+  pdfx: ^2.6.0
+  easy_localization: ^3.0.4
+  wakelock_plus: ^1.1.4
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +75,7 @@ flutter:
   assets:
     - assets/images/
     - assets/
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

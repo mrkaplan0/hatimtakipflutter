@@ -1,13 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/listpage_hatimcard.dart';
-import 'package:hatimtakipflutter/Views/detail_pages/hatim_detailpage.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/publichatim_detailpage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
 class ReadingPage extends ConsumerWidget {
-  String readingPageTitle = "Herkesin Katılabileceği Hatimler";
+  String readingPageTitle = tr("Herkesin Katilabilecegi Hatimler");
 
   ReadingPage({super.key});
 
@@ -17,7 +17,11 @@ class ReadingPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(readingPageTitle),
+        automaticallyImplyLeading: false,
+        title: Text(
+          readingPageTitle,
+          style: const TextStyle(fontSize: 20),
+        ),
       ),
       body: hatimList.when(
           data: (hatimList) {

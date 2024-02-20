@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
@@ -9,19 +10,19 @@ class SignInPage extends ConsumerWidget {
   SignInPage({super.key});
 
   late String _email, _password, _username;
-  final String _usernameLabelText = "Kullanıcı Adı";
-  final String _usernameHintText = 'Kullanıcı adınızı giriniz.';
-  final String _emailLabelText = "E-mail";
-  final String _emailHintText = 'E-mailinizi giriniz.';
-  final String _passwordLabelText = 'Şifre';
-  final String _passwordHintText = 'Şifrenizi giriniz.';
-  final String _signUpButtonText = "Kaydolun";
-  final String _canNotNilText = "Bu alan bos birakilamaz.";
-  final String _invalidMail = "Geçersiz email adresi";
-  final String _invalidPassword = "Sifre en az 6 karakter olmalı.";
-  final String _usernameNotUsableText =
-      "Bu kullanici adi kullaniliyor! / \nKullanici adi alani bos birakilamaz.";
-  final String _usernameCanNotNilText = " Kullanici adi alani bos birakilamaz.";
+  final String _usernameLabelText = tr("Kullanici Adi");
+  final String _usernameHintText = tr('Kullanici adinizi giriniz.');
+  final String _emailLabelText = tr("Email");
+  final String _emailHintText = tr('Emailinizi giriniz.');
+  final String _passwordLabelText = tr('Sifre');
+  final String _passwordHintText = tr('Sifrenizi giriniz.');
+  final String _signUpButtonText = tr("Kaydolun");
+  final String _canNotNilText = tr("Bu alan bos birakilamaz.");
+  final String _invalidMail = tr("Gecersiz email adresi");
+  final String _invalidPassword = tr("Sifre en az 6 karakter olmali.");
+  final String _usernameNotUsableText = tr(
+      "Bu kullanici adi kullaniliyor! / Kullanici adi alani bos birakilamaz.");
+  final String _usernameCanNotNilText = tr("Bu alan bos birakilamaz.");
   List<MyUser> userList = [];
 
   final _formKey = GlobalKey<FormState>();

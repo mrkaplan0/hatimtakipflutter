@@ -13,7 +13,7 @@ class RouterPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var user = ref.watch(userViewModelProvider).user;
 
-    if (ref.watch(userViewModelProvider.notifier).state == ViewState.Idle) {
+    if (ref.watch(userViewModelProvider.notifier).state == ViewState.idle) {
       if (user == null) {
         debugPrint("router null user");
         return const LoginPage();

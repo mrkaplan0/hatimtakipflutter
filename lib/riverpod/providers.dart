@@ -83,8 +83,8 @@ final butnActvateListProv =
   },
 );
 
-final updateRemainingPagesProv = FutureProviderFamily<bool, HatimPartModel>(
-    (ref, part) async =>
+final updateRemainingPagesProv =
+    AutoDisposeFutureProviderFamily<bool, HatimPartModel>((ref, part) async =>
         await ref.read(firestoreProvider).updateRemainingPages(part));
 
 final onlyPublicHatims = FutureProvider(

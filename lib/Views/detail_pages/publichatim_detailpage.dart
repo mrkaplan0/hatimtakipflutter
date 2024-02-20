@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+// ignore: must_be_immutable
 class PublicHatimDetailPage extends ConsumerWidget {
   Hatim hatim;
 
-  String readButtonText = "Oku";
+  String readButtonText = tr("Oku");
   PublicHatimDetailPage({super.key, required this.hatim});
 
   @override
@@ -48,6 +50,7 @@ class PublicHatimDetailPage extends ConsumerWidget {
                                                       .user!,
                                                   parts[i]);
                                           ref.invalidate(fetchHatims);
+                                          ref.invalidate(myIndividualParts);
                                           ref.invalidate(
                                               navigationIndexProvider);
                                           // ignore: use_build_context_synchronously
@@ -79,7 +82,11 @@ class PublicHatimDetailPage extends ConsumerWidget {
               .read(hatimPartsProvider.notifier)
               .setPartName(parts[i].pages)),
           Text(
-            "Okuyan: ${parts[i].ownerOfPart != null ? parts[i].ownerOfPart!.username : ""}",
+            "Okuyan:".tr(args: [
+              (parts[i].ownerOfPart != null
+                  ? parts[i].ownerOfPart!.username
+                  : "")
+            ]),
             overflow: TextOverflow.clip,
             softWrap: true,
           ),
