@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/Quranpage.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/digital_rosary.dart';
+import 'package:hatimtakipflutter/Views/detail_pages/hatim_pray.dart';
 
 class PrayAndQuranPage extends ConsumerWidget {
   final String prayPageTitle = tr("Dua ve Kuran");
@@ -32,7 +33,12 @@ class PrayAndQuranPage extends ConsumerWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => QuranPage(initialPage: 0)));
                   }),
-              CustomButton(btnText: prayOfHatimText, onPressed: () {}),
+              CustomButton(
+                  btnText: prayOfHatimText,
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => HatimPrayPage()));
+                  }),
               CustomButton(
                   btnText: digitalRosary,
                   onPressed: () {

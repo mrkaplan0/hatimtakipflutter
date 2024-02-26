@@ -103,7 +103,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextFormField passwordFormfield(BuildContext context) {
     return TextFormField(
       focusNode: focusNode3,
-      initialValue: "1234555",
+      // initialValue: "1234555",
       obscureText: true,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -128,7 +128,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextFormField emailFormfield(BuildContext context) {
     return TextFormField(
       focusNode: focusNode2,
-      initialValue: "kaplan@kaplan.com",
+      // initialValue: "kaplan@kaplan.com",
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
