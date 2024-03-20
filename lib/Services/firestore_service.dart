@@ -76,296 +76,143 @@ class FirestoreService implements MyDatabaseDelegate {
 
   @override
   Future<bool> createNewHatim(Hatim newHatim) async {
-    final docRefPrivateList =
-        db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
-    final docRefPublicList =
-        db.collection('Hatimler').doc('MainLists').collection('PublicLists');
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
+
     try {
-      if (newHatim.isPrivate == true) {
-        await docRefPrivateList
+      await docRefHatimList
+          .doc(newHatim.id)
+          .set(newHatim.toJson(), SetOptions(merge: true));
+      for (var usr in newHatim.participantsList) {
+        await docRefHatimList
             .doc(newHatim.id)
-            .set(newHatim.toJson(), SetOptions(merge: true));
-        for (var usr in newHatim.participantsList) {
-          await docRefPrivateList
-              .doc(newHatim.id)
-              .collection('Participants')
-              .doc(usr.id)
-              .set(usr.toJson(), SetOptions(merge: true));
-        }
-        for (var i = 0; i < newHatim.partsOfHatimList.length; i++) {
-          await docRefPrivateList
-              .doc(newHatim.id)
-              .collection('Parts')
-              .doc(newHatim.partsOfHatimList[i].id)
-              .set(newHatim.partsOfHatimList[i].toJson());
-        }
-      } else {
-        await docRefPublicList
-            .doc(newHatim.id)
-            .set(newHatim.toJson(), SetOptions(merge: true));
-        for (var usr in newHatim.participantsList) {
-          await docRefPublicList
-              .doc(newHatim.id)
-              .collection('Participants')
-              .doc(usr.id)
-              .set(usr.toJson(), SetOptions(merge: true));
-          await db
-              .collection('Users')
-              .doc(newHatim.createdBy?.id)
-              .collection('favoritesPeople')
-              .doc(usr.id)
-              .set(usr.toJson(), SetOptions(merge: true));
-        }
-        for (var i = 0; i < newHatim.partsOfHatimList.length; i++) {
-          await docRefPublicList
-              .doc(newHatim.id)
-              .collection('Parts')
-              .doc(newHatim.partsOfHatimList[i].id)
-              .set(newHatim.partsOfHatimList[i].toJson());
-        }
+            .collection('Participants')
+            .doc(usr.id)
+            .set(usr.toJson(), SetOptions(merge: true));
+        await db
+            .collection('Users')
+            .doc(newHatim.createdBy?.id)
+            .collection('favoritesPeople')
+            .doc(usr.id)
+            .set(usr.toJson(), SetOptions(merge: true));
       }
     } catch (error) {
-      print(error);
+      return false;
     }
     return true;
   }
 
   @override
-  Future<List<Hatim>> readHatimList(MyUser user) async {
-    Set<Hatim> hatimList = {};
-    var docRefPrivateList =
-        db.collection("Hatimler").doc("MainLists").collection("PrivateLists");
-    var docRefPublicList =
-        db.collection("Hatimler").doc("MainLists").collection("PublicLists");
+  Stream<List<Hatim>> readHatimList(MyUser user) {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
 
     try {
-      var querySnap = await docRefPrivateList
+      var querySnap = docRefHatimList
           .where("participantsList", arrayContains: user.toJson())
-          .get();
+          .snapshots();
 
-      for (var doc in querySnap.docs) {
-        var hatim = Hatim.fromJson(doc.data());
-
-        hatimList.add(hatim);
-      }
+      return querySnap.map((hatimList) =>
+          hatimList.docs.map((hatim) => Hatim.fromJson(hatim.data())).toList());
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
+      return const Stream.empty();
     }
-
-    try {
-      var querySnap = await docRefPublicList
-          .where("participantsList", arrayContains: user.toJson())
-          .get();
-
-      for (var doc in querySnap.docs) {
-        var hatim = Hatim.fromJson(doc.data());
-
-        hatimList.add(hatim);
-      }
-    } catch (error) {
-      print(error);
-    }
-
-    return hatimList.toList();
   }
 
   @override
   Future<bool> deleteHatim(Hatim hatim) async {
-    final docRefPrivateList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PrivateLists");
-    final docRefPublicList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PublicLists");
-
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
-      if (hatim.isPrivate == true) {
-        await docRefPrivateList.doc(hatim.id).delete();
-      } else {
-        await docRefPublicList.doc(hatim.id).delete();
-      }
+      await docRefHatimList.doc(hatim.id).delete();
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
       return false;
     }
     return true;
-  }
-
-  @override
-  Future<List<HatimPartModel>> fetchHatimParts(Hatim hatim) async {
-    List<HatimPartModel> partslist = [];
-    final docRefPrivateList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PrivateLists");
-    final docRefPublicList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PublicLists");
-
-    try {
-      if (hatim.isPrivate == true) {
-        final querySnap =
-            await docRefPrivateList.doc(hatim.id).collection("Parts").get();
-        for (var doc in querySnap.docs) {
-          final part = HatimPartModel.fromJson(doc.data());
-          partslist.add(part);
-        }
-      } else {
-        final querySnap =
-            await docRefPublicList.doc(hatim.id).collection("Parts").get();
-        for (var doc in querySnap.docs) {
-          final part = HatimPartModel.fromJson(doc.data());
-          partslist.add(part);
-        }
-      }
-    } catch (error) {
-      print(error);
-    }
-
-    return partslist;
   }
 
   @override
   Future<bool> updateOwnerOfPart(MyUser newOwner, HatimPartModel part) async {
-    final docRefPrivateList =
-        db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
-    final docRefPublicList =
-        db.collection('Hatimler').doc('MainLists').collection('PublicLists');
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
-      final userDict = newOwner.toJson();
-      if (part.isPrivate == true) {
-        await docRefPrivateList
-            .doc(part.hatimID)
-            .collection('Parts')
-            .doc(part.id)
-            .update({'ownerOfPart': userDict});
-      } else {
-        await docRefPublicList
-            .doc(part.hatimID)
-            .collection('Parts')
-            .doc(part.id)
-            .update({'ownerOfPart': userDict});
-      }
-    } catch (error) {
-      print(error);
-    }
-    return true;
-  }
+      final userMap = newOwner.toJson();
+      final pubDocRef = docRefHatimList.doc(part.hatimID);
 
-  @override
-  Future<List<HatimPartModel>> fetchIndividualParts(
-      List<Hatim> hatimList, MyUser myUser) async {
-    List<HatimPartModel> partslist = [];
-    final docRefPrivateList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PrivateLists");
-    final docRefPublicList = FirebaseFirestore.instance
-        .collection("Hatimler")
-        .doc("MainLists")
-        .collection("PublicLists");
+      db.runTransaction((transaction) async {
+        final hatimData = await transaction.get(pubDocRef);
+        var newParticipantsList = hatimData.data()!["participantsList"];
+        newParticipantsList.add(userMap);
 
-    try {
-      for (var hatim in hatimList) {
-        if (hatim.isPrivate == true) {
-          final querySnap = await docRefPrivateList
-              .doc(hatim.id)
-              .collection("Parts")
-              .where("ownerOfPart", isEqualTo: myUser.toJson())
-              .get();
-          for (var doc in querySnap.docs) {
-            final part = HatimPartModel.fromJson(doc.data());
-            partslist.add(part);
-          }
-        } else {
-          final querySnap = await docRefPublicList
-              .doc(hatim.id)
-              .collection("Parts")
-              .where("ownerOfPart", isEqualTo: myUser.toJson())
-              .get();
-          for (var doc in querySnap.docs) {
-            final part = HatimPartModel.fromJson(doc.data());
-            partslist.add(part);
+        List partList = hatimData.data()!['partsOfHatimList'];
+        for (int i = 0; i < partList.length; i++) {
+          if (partList[i]["id"] == part.id) {
+            partList[i]["ownerOfPart"] = userMap;
+            transaction.update(pubDocRef, {
+              "participantsList": newParticipantsList,
+              'partsOfHatimList': partList
+            });
+            break;
           }
         }
-      }
+      });
     } catch (error) {
-      return [];
-    }
-    print(" db calisti");
-    partslist.sort((a, b) => a.pages.first.compareTo(b.pages.first));
-    return partslist;
-  }
-
-  @override
-  Future<bool> updateRemainingPages(HatimPartModel part) async {
-    final docRefPrivateList =
-        db.collection('Hatimler').doc('MainLists').collection('PrivateLists');
-    final docRefPublicList =
-        db.collection('Hatimler').doc('MainLists').collection('PublicLists');
-    try {
-      if (part.isPrivate == true) {
-        await docRefPrivateList
-            .doc(part.hatimID)
-            .collection('Parts')
-            .doc(part.id)
-            .update({'remainingPages': part.remainingPages});
-      } else {
-        await docRefPublicList
-            .doc(part.hatimID)
-            .collection('Parts')
-            .doc(part.id)
-            .update({'remainingPages': part.remainingPages});
-      }
-    } catch (error) {
+      debugPrint(error.toString());
       return false;
     }
     return true;
   }
 
   @override
-  Future<List<Hatim>> fetchOnlyPublicHatims() async {
-    Set<Hatim> hatimList = <Hatim>{};
-    final docRefPublicList =
-        db.collection('Hatimler').doc('MainLists').collection('PublicLists');
+  Future<bool> updateRemainingPages(HatimPartModel part) async {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
-      final querySnap = await docRefPublicList.get();
-      for (final doc in querySnap.docs) {
-        final hatim = Hatim.fromJson(doc.data());
-        for (final part in hatim.partsOfHatimList) {
-          if (part.ownerOfPart == null) {
-            hatimList.add(hatim);
+      final pubDocRef = docRefHatimList.doc(part.hatimID);
+
+      db.runTransaction((transaction) async {
+        final snapshot = await transaction.get(pubDocRef);
+
+        //  print(snapshot.data()!['partsOfHatimList'].toList());
+        List partList = snapshot.data()!['partsOfHatimList'];
+        for (int i = 0; i < partList.length; i++) {
+          if (partList[i]["id"] == part.id) {
+            partList[i]['remainingPages'] = part.remainingPages;
+            print('sss' + partList.toString());
+            transaction.update(pubDocRef, {'partsOfHatimList': partList});
             break;
           }
         }
-      }
+      }).then(
+        (value) => print("DocumentSnapshot successfully updated!"),
+        onError: (e) => print("Error updating document $e"),
+      );
+      /*   await docRefPublicList
+            .doc(part.hatimID)
+            .collection('Parts')
+            .doc(part.id)
+            .update({'remainingPages': part.remainingPages}); */
     } catch (error) {
-      print(error);
-    }
-    return hatimList.toList();
+      print('ERROR' + error.toString());
+      return false;
+    } finally {}
+    return true;
   }
 
   @override
-  Future<List<HatimPartModel>> fetchOnlyFreiPartsOfPublicHatims(
-      Hatim hatim) async {
-    var partslist = <HatimPartModel>[];
-    final docRefPublicList =
-        db.collection('Hatimler').doc('MainLists').collection('PublicLists');
+  Stream<List<Hatim>> fetchOnlyPublicHatims() {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
       final querySnap =
-          await docRefPublicList.doc(hatim.id).collection('Parts').get();
-      for (final doc in querySnap.docs) {
-        final part = HatimPartModel.fromJson(doc.data());
-        if (part.ownerOfPart == null) {
-          partslist.add(part);
-        }
-      }
+          docRefHatimList.where("isPrivate", isEqualTo: false).snapshots();
+      return querySnap.map((hatimList) =>
+          hatimList.docs.map((hatim) => Hatim.fromJson(hatim.data())).toList());
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
+      return const Stream.empty();
     }
-    return partslist;
   }
 }

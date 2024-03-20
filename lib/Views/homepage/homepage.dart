@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/individualspage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/listpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/prayandQuranpage.dart';
-import 'package:hatimtakipflutter/Views/homepage/navTabs/readingpage.dart';
+import 'package:hatimtakipflutter/Views/homepage/navTabs/publicreadingpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/settingspage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
@@ -49,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   final List<Widget> _pages = [
     ListsPage(),
     IndividualPage(),
-    ReadingPage(),
+    PublicReadingPage(),
     PrayAndQuranPage(),
     SettingsPage()
   ];

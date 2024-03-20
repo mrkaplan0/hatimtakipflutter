@@ -57,7 +57,6 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           //update part`s page
           ref.read(updateRemainingPagesProv(widget.part!));
           ref.invalidate(getMyIndividualParts);
-          ref.invalidate(myIndividualParts);
         }
         Navigator.pop(context);
         return true;
@@ -185,7 +184,6 @@ class _QuranPageState extends ConsumerState<QuranPage> {
                       ref.read(updateRemainingPagesProv(widget.part!));
 
                       ref.invalidate(getMyIndividualParts);
-                      ref.invalidate(myIndividualParts);
                     }
                     Navigator.pop(context);
                   },

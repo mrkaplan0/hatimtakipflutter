@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/Quranpage.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
@@ -29,7 +28,7 @@ class IndividualPage extends ConsumerWidget {
         ),
       ),
       body: Consumer(builder: (context, ref, widget) {
-        final list = ref.watch(myIndividualParts);
+        final list = ref.watch(getMyIndividualParts);
         if (list.isNotEmpty) {
           return listWidget(context, list, ref);
         } else {
@@ -151,7 +150,7 @@ class IndividualPage extends ConsumerWidget {
                   },
                   child: Center(
                     child: Text(
-                        "${ref.watch(myIndividualParts)[i].remainingPages.length}"),
+                        "${ref.watch(getMyIndividualParts)[i].remainingPages.length}"),
                   )),
             ),
           ),
@@ -191,7 +190,6 @@ class IndividualPage extends ConsumerWidget {
         ref.read(updateRemainingPagesProv(part));
         ref.invalidate(updateRemainingPagesProv);
         ref.invalidate(getMyIndividualParts);
-        ref.invalidate(myIndividualParts);
       } catch (e) {
         showDialog(
             context: context,
@@ -210,10 +208,14 @@ class IndividualPage extends ConsumerWidget {
   void reducingButtonAction(
       List<HatimPartModel> list, int i, WidgetRef ref, BuildContext context) {
     if (list[i].remainingPages.isNotEmpty) {
-      ref.watch(myIndividualParts.notifier).state[i].remainingPages.removeAt(0);
+      ref
+          .watch(getMyIndividualParts.notifier)
+          .state[i]
+          .remainingPages
+          .removeAt(0);
       ref.read(butnActvateListProv(i).notifier).makeTrue();
       print(list[i].remainingPages);
-      ref.invalidate(myIndividualParts);
+      ref.invalidate(getMyIndividualParts);
       _updatePart(list[i], ref, context);
     } else {
       // Show Ad
@@ -225,7 +227,7 @@ class IndividualPage extends ConsumerWidget {
     if (list[i].remainingPages.isNotEmpty) {
       int firstItem = list[i].remainingPages.first;
       ref
-          .watch(myIndividualParts.notifier)
+          .watch(getMyIndividualParts.notifier)
           .state[i]
           .remainingPages
           .insert(0, firstItem - 1);
@@ -235,13 +237,13 @@ class IndividualPage extends ConsumerWidget {
       }
     } else {
       ref
-          .watch(myIndividualParts.notifier)
+          .watch(getMyIndividualParts.notifier)
           .state[i]
           .remainingPages
           .add(list[i].pages.last);
     }
 
-    ref.invalidate(myIndividualParts);
+    ref.invalidate(getMyIndividualParts);
     _updatePart(list[i], ref, context);
   }
 }

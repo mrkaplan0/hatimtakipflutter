@@ -17,21 +17,7 @@ class HatimSettingPage extends ConsumerStatefulWidget {
 }
 
 class _HatimSettingPageState extends ConsumerState<HatimSettingPage> {
-  late PageController _pageController;
   final _currentPageNotifier = ValueNotifier<int>(0);
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

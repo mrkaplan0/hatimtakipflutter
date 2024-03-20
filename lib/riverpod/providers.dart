@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
@@ -45,35 +47,34 @@ final hatimPartsProvider =
     ChangeNotifierProvider((ref) => PartsOfHatimViewModel());
 
 // for fetching Hatims
-final fetchHatims = FutureProvider<List<Hatim>>((ref) async => await ref
-    .read(firestoreProvider)
+final fetchHatims = StreamProvider<List<Hatim>>((ref) => ref
+    .watch(firestoreProvider)
     .readHatimList(ref.read(userViewModelProvider).user!));
 
 // for fetching parts of Hatim
-final fetchHatimParts = FutureProviderFamily<List<HatimPartModel>, Hatim>(
-    (ref, hatim) async =>
-        await ref.read(firestoreProvider).fetchHatimParts(hatim));
-
-// for fetching user`s parts
-final getMyIndividualParts = FutureProvider<List<HatimPartModel>>((ref) async {
-  var hatimsasync = ref.read(fetchHatims).asData?.valueOrNull;
-  var myUser = ref.read(userViewModelProvider).user;
-
-  List<HatimPartModel> myIndiviParts = await ref
-      .read(firestoreProvider)
-      .fetchIndividualParts(hatimsasync!, myUser!);
-
-  return myIndiviParts;
+final fetchHatimParts =
+    StateProviderFamily<List<HatimPartModel>, Hatim>((ref, hatim) {
+  return hatim.partsOfHatimList;
 });
 
-// for listening myIndividualParts and reducing reading counts from database
-final myIndividualParts = StateProvider<List<HatimPartModel>>((ref) {
-  var myIndiviParts = ref.watch(getMyIndividualParts);
-  List<HatimPartModel> myParts = [];
-  myIndiviParts.whenData((parts) {
-    myParts = parts;
-  });
-  return myParts;
+// for fetching user`s parts
+final getMyIndividualParts = StateProvider<List<HatimPartModel>>((ref) {
+  List<HatimPartModel> myIndiviParts = [];
+  var myUser = ref.read(userViewModelProvider).user;
+  var hatimList = ref.watch(fetchHatims).value;
+
+  if (hatimList != null) {
+    for (var hatim in hatimList) {
+      for (var part in hatim.partsOfHatimList) {
+        if (part.ownerOfPart?.id == myUser?.id) {
+          myIndiviParts.add(part);
+        }
+      }
+    }
+    myIndiviParts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+  }
+
+  return myIndiviParts;
 });
 
 final butnActvateListProv =
@@ -87,5 +88,5 @@ final updateRemainingPagesProv =
     AutoDisposeFutureProviderFamily<bool, HatimPartModel>((ref, part) async =>
         await ref.read(firestoreProvider).updateRemainingPages(part));
 
-final onlyPublicHatims = FutureProvider(
-    (ref) async => await ref.read(firestoreProvider).fetchOnlyPublicHatims());
+final onlyPublicHatims = StreamProvider<List<Hatim>>(
+    (ref) => ref.watch(firestoreProvider).fetchOnlyPublicHatims());

@@ -87,7 +87,6 @@ class AddUsernamePage extends ConsumerWidget {
           .saveMyUser(ref.read(userViewModelProvider).user!)
           .then((value) {
         if (value) {
-          _controller.dispose();
           Navigator.popAndPushNamed(context, "/RouterPage");
         }
       });
