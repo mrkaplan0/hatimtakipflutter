@@ -231,7 +231,7 @@ class CuzSettingsPage extends ConsumerWidget {
         ref.invalidate(newHatimProvider);
         ref.invalidate(hatimPartsProvider);
         ref.invalidate(fetchHatims);
-        ref.invalidate(myIndividualParts);
+        ref.invalidate(getMyIndividualParts);
         // ignore: use_build_context_synchronously
         Navigator.popAndPushNamed(context, '/RouterPage');
       }

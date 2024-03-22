@@ -2,7 +2,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
@@ -149,9 +148,6 @@ class SelectDatePage extends ConsumerWidget {
 
             ref.watch(date.notifier).state = _selectedDate;
             ref.read(newHatimProvider).deadline = _selectedDate;
-            print(_selectedDate);
-
-            print(ref.watch(date));
           }
         });
       }

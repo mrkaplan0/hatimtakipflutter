@@ -6,10 +6,10 @@ import 'package:hatimtakipflutter/Views/detail_pages/publichatim_detailpage.dart
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
-class ReadingPage extends ConsumerWidget {
+class PublicReadingPage extends ConsumerWidget {
   String readingPageTitle = tr("Herkesin Katilabilecegi Hatimler");
 
-  ReadingPage({super.key});
+  PublicReadingPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,6 +48,6 @@ class ReadingPage extends ConsumerWidget {
   }
 
   Widget? loading() {
-    return const CircularProgressIndicator();
+    return const Center(child: CircularProgressIndicator());
   }
 }

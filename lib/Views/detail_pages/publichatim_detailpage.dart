@@ -15,60 +15,51 @@ class PublicHatimDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final partList = ref.watch(fetchHatimParts(hatim));
-
+    partList.sort((a, b) => a.pages.first.compareTo(b.pages.first));
     return Scaffold(
         appBar: AppBar(
           title: Text(hatim.hatimName ?? ''),
         ),
-        body: partList.when(
-            data: (parts) {
-              parts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
-              return ListView.builder(
-                itemCount: parts.length,
-                itemBuilder: (context, i) {
-                  return parts[i].ownerOfPart == null
-                      ? Consumer(
-                          builder: (context, ref, child) {
-                            return SizedBox(
-                              height: 70,
-                              child: Card(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  partInfo(ref, parts, i),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: TextButton(
-                                        onPressed: () async {
-                                          await ref
-                                              .read(firestoreProvider)
-                                              .updateOwnerOfPart(
-                                                  ref
-                                                      .read(
-                                                          userViewModelProvider)
-                                                      .user!,
-                                                  parts[i]);
-                                          ref.invalidate(fetchHatims);
-                                          ref.invalidate(myIndividualParts);
-                                          ref.invalidate(
-                                              navigationIndexProvider);
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(readButtonText)),
-                                  )
-                                ],
-                              )),
-                            );
-                          },
-                        )
-                      : const SizedBox();
-                },
-              );
-            },
-            error: error,
-            loading: loading));
+        body: ListView.builder(
+          itemCount: partList.length,
+          itemBuilder: (context, i) {
+            return partList[i].ownerOfPart == null
+                ? Consumer(
+                    builder: (context, ref, child) {
+                      return SizedBox(
+                        height: 70,
+                        child: Card(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            partInfo(ref, partList, i),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: TextButton(
+                                  onPressed: () async {
+                                    await ref
+                                        .read(firestoreProvider)
+                                        .updateOwnerOfPart(
+                                            ref
+                                                .read(userViewModelProvider)
+                                                .user!,
+                                            partList[i]);
+                                    ref.invalidate(fetchHatims);
+                                    ref.invalidate(getMyIndividualParts);
+                                    ref.invalidate(navigationIndexProvider);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(readButtonText)),
+                            )
+                          ],
+                        )),
+                      );
+                    },
+                  )
+                : const SizedBox();
+          },
+        ));
   }
 
   Padding partInfo(WidgetRef ref, List<HatimPartModel> parts, int i) {

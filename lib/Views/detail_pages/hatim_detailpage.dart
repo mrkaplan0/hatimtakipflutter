@@ -28,88 +28,83 @@ class HatimDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final partList = ref.watch(fetchHatimParts(hatim));
+    partList.sort((a, b) => a.pages.first.compareTo(b.pages.first));
 
     return Scaffold(
         appBar: AppBar(
           title: Text(hatim.hatimName ?? ''),
-          actions: [
-            if (ref.watch(editfuncActivatePro) == true)
-              IconButton(
-                  onPressed: () {
-                    ref.watch(editfuncActivatePro.notifier).state = false;
-                  },
-                  icon: Text(
-                    cancelText,
-                    style: TextStyle(color: Colors.cyan.shade700),
-                  )),
-            _popUpMenu(context, ref),
-          ],
+          actions: ref.read(userViewModelProvider).user!.id ==
+                  hatim.createdBy!.id
+              ? [
+                  if (ref.watch(editfuncActivatePro) == true)
+                    IconButton(
+                        onPressed: () {
+                          ref.watch(editfuncActivatePro.notifier).state = false;
+                        },
+                        icon: Text(
+                          cancelText,
+                          style: TextStyle(color: Colors.cyan.shade700),
+                        )),
+                  _popUpMenu(context, ref),
+                ]
+              : null,
         ),
-        body: partList.when(
-            data: (parts) {
-              parts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
-              return ListView.builder(
-                itemCount: parts.length,
-                itemBuilder: (context, i) {
-                  return Consumer(
-                    builder: (context, ref, child) {
-                      return GestureDetector(
-                        onTap: () => ref.watch(editfuncActivatePro) == true
-                            ? _editFunc(context, ref, i)
-                            : null,
-                        child: SizedBox(
-                          height: 70,
-                          child: Card(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: ListView.builder(
+          itemCount: partList.length,
+          itemBuilder: (context, i) {
+            return Consumer(
+              builder: (context, ref, child) {
+                return GestureDetector(
+                  onTap: () => ref.watch(editfuncActivatePro) == true
+                      ? _editFunc(context, ref, i)
+                      : null,
+                  child: SizedBox(
+                    height: 80,
+                    child: Card(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(ref
-                                        .read(hatimPartsProvider.notifier)
-                                        .setPartName(parts[i].pages)),
-                                    Text(
-                                      "Okuyan:".tr(args: [
-                                        (parts[i].ownerOfPart != null
-                                            ? parts[i].ownerOfPart!.username
-                                            : "")
-                                      ]),
-                                      overflow: TextOverflow.clip,
-                                      softWrap: true,
-                                    ),
-                                    rateLine(context, parts[i])
-                                  ],
-                                ),
+                              Text(ref
+                                  .read(hatimPartsProvider.notifier)
+                                  .setPartName(partList[i].pages)),
+                              Text(
+                                "Okuyan:".tr(args: [
+                                  (partList[i].ownerOfPart != null
+                                      ? partList[i].ownerOfPart!.username
+                                      : "")
+                                ]),
+                                overflow: TextOverflow.clip,
+                                softWrap: true,
                               ),
-                              // when edit mode activated, show an arrow in card
-                              ref.watch(editfuncActivatePro) == true
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 18,
-                                        color: Colors.cyan.shade700
-                                            .withOpacity(0.5),
-                                      ),
-                                    )
-                                  : const SizedBox()
+                              rateLine(context, partList[i])
                             ],
-                          )),
+                          ),
                         ),
-                      );
-                    },
-                  );
-                },
-              );
-            },
-            error: error,
-            loading: loading));
+                        // when edit mode activated, show an arrow in card
+                        ref.watch(editfuncActivatePro) == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 18,
+                                  color: Colors.cyan.shade700.withOpacity(0.5),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    )),
+                  ),
+                );
+              },
+            );
+          },
+        ));
   }
 
   Widget? error(Object error, StackTrace stackTrace) {
@@ -239,6 +234,7 @@ class HatimDetailsPage extends ConsumerWidget {
                         Flexible(
                           child: CustomButton(
                               btnText: deleteBtnText,
+                              textColor: Colors.white,
                               buttonBgColor: Colors.red,
                               onPressed: () async {
                                 await ref

@@ -23,8 +23,11 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
   Future<MyUser?> currentUser() async {
     try {
       User? user = _auth.currentUser;
-
-      return _usersFromFirebase(user!);
+      if (user != null) {
+        return _usersFromFirebase(user);
+      } else {
+        return null;
+      }
     } catch (e) {
       debugPrint("Hata CurrentUser $e");
       return null;
