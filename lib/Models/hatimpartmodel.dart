@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:uuid/uuid.dart';
 

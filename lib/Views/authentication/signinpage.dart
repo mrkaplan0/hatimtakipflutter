@@ -176,7 +176,10 @@ class SignInPage extends ConsumerWidget {
   }
 
   saveUser(BuildContext context, WidgetRef ref) async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() &&
+        ref.watch(isUsernameNotAvailableProv.notifier).state == false &&
+        _controller.text.isNotEmpty) {
+      _username = _controller.text;
       _formKey.currentState?.save();
       var createdUser = await ref
           .read(userViewModelProvider)

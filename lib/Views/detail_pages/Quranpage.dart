@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,6 @@ class _QuranPageState extends ConsumerState<QuranPage> {
   int _actualPageNumber = 2, _allPagesCount = 0;
   late PdfController _pdfController;
   bool isVisible = true;
-  String appBartitle = tr("Kuran");
 
   @override
   void initState() {
@@ -49,46 +49,45 @@ class _QuranPageState extends ConsumerState<QuranPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (widget.part != null) {
-          //remove last page
-          removePageAction();
-          //update part`s page
-          ref.read(updateRemainingPagesProv(widget.part!));
-          ref.invalidate(getMyIndividualParts);
-        }
-        Navigator.pop(context);
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey,
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            PdfView(
-              controller: _pdfController,
-              scrollDirection: Axis.horizontal,
-              reverse: true,
-              pageSnapping: false,
-              physics: const NeverScrollableScrollPhysics(),
-              onDocumentLoaded: (document) {
-                setState(() {
-                  _allPagesCount = document.pagesCount;
-                });
-              },
-              onPageChanged: (page) {
-                setState(() {
-                  _actualPageNumber = page;
-                });
-              },
-            ),
-            backButtonWidget(context),
-            prevAndNextButtonWidget()
-          ],
-        ),
-      ),
-    );
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            return;
+          }
+          if (widget.part != null) {
+            _showDialogForLastPage(context);
+          } else {
+            Navigator.pop(context);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.grey,
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              PdfView(
+                controller: _pdfController,
+                scrollDirection: Axis.horizontal,
+                reverse: true,
+                pageSnapping: false,
+                physics: const NeverScrollableScrollPhysics(),
+                onDocumentLoaded: (document) {
+                  setState(() {
+                    _allPagesCount = document.pagesCount;
+                  });
+                },
+                onPageChanged: (page) {
+                  setState(() {
+                    _actualPageNumber = page;
+                  });
+                },
+              ),
+              backButtonWidget(context),
+              prevAndNextButtonWidget()
+            ],
+          ),
+        ));
   }
 
   Align prevAndNextButtonWidget() {
@@ -168,7 +167,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
   }
 
 //Back Button
-  Align backButtonWidget(BuildContext context) {
+  Widget backButtonWidget(BuildContext context) {
     return Align(
         alignment: Alignment.topLeft,
         child: Padding(
@@ -177,15 +176,11 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             children: [
               IconButton(
                   onPressed: () {
-                    //remove last page
-                    removePageAction();
-                    //update part`s page
                     if (widget.part != null) {
-                      ref.read(updateRemainingPagesProv(widget.part!));
-
-                      ref.invalidate(getMyIndividualParts);
+                      _showDialogForLastPage(context);
+                    } else {
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back)),
             ],
@@ -204,9 +199,53 @@ class _QuranPageState extends ConsumerState<QuranPage> {
         }
       } else {
         widget.part!.remainingPages.add(widget.part!.pages.last);
-        print(widget.part);
-        print("undo");
       }
     }
+  }
+
+  _showDialogForLastPage(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Uyari'.tr()),
+          content: Text(
+            'Bu sayfa tamamlandi mi?'.tr(),
+            style: const TextStyle(fontSize: 18),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text('Hayir'.tr()),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+              ),
+              child: Text(
+                'Evet'.tr(),
+                style: const TextStyle(),
+              ),
+              onPressed: () {
+                //remove last page
+                removePageAction();
+                //update part`s page
+
+                ref.read(updateRemainingPagesProv(widget.part!));
+
+                ref.invalidate(getMyIndividualParts);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

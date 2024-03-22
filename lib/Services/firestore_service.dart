@@ -84,11 +84,6 @@ class FirestoreService implements MyDatabaseDelegate {
           .doc(newHatim.id)
           .set(newHatim.toJson(), SetOptions(merge: true));
       for (var usr in newHatim.participantsList) {
-        await docRefHatimList
-            .doc(newHatim.id)
-            .collection('Participants')
-            .doc(usr.id)
-            .set(usr.toJson(), SetOptions(merge: true));
         await db
             .collection('Users')
             .doc(newHatim.createdBy?.id)
@@ -175,12 +170,10 @@ class FirestoreService implements MyDatabaseDelegate {
       db.runTransaction((transaction) async {
         final snapshot = await transaction.get(pubDocRef);
 
-        //  print(snapshot.data()!['partsOfHatimList'].toList());
         List partList = snapshot.data()!['partsOfHatimList'];
         for (int i = 0; i < partList.length; i++) {
           if (partList[i]["id"] == part.id) {
             partList[i]['remainingPages'] = part.remainingPages;
-            print('sss' + partList.toString());
             transaction.update(pubDocRef, {'partsOfHatimList': partList});
             break;
           }
@@ -189,15 +182,9 @@ class FirestoreService implements MyDatabaseDelegate {
         (value) => print("DocumentSnapshot successfully updated!"),
         onError: (e) => print("Error updating document $e"),
       );
-      /*   await docRefPublicList
-            .doc(part.hatimID)
-            .collection('Parts')
-            .doc(part.id)
-            .update({'remainingPages': part.remainingPages}); */
     } catch (error) {
-      print('ERROR' + error.toString());
       return false;
-    } finally {}
+    }
     return true;
   }
 

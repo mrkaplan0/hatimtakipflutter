@@ -77,6 +77,7 @@ final getMyIndividualParts = StateProvider<List<HatimPartModel>>((ref) {
   return myIndiviParts;
 });
 
+//in individual Page to activate undo button if page is deleted.
 final butnActvateListProv =
     StateNotifierProvider.family.autoDispose<IndiviPageViewModel, bool, int>(
   (ref, arg) {

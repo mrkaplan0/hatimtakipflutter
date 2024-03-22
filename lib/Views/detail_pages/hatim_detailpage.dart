@@ -33,18 +33,21 @@ class HatimDetailsPage extends ConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(hatim.hatimName ?? ''),
-          actions: [
-            if (ref.watch(editfuncActivatePro) == true)
-              IconButton(
-                  onPressed: () {
-                    ref.watch(editfuncActivatePro.notifier).state = false;
-                  },
-                  icon: Text(
-                    cancelText,
-                    style: TextStyle(color: Colors.cyan.shade700),
-                  )),
-            _popUpMenu(context, ref),
-          ],
+          actions: ref.read(userViewModelProvider).user!.id ==
+                  hatim.createdBy!.id
+              ? [
+                  if (ref.watch(editfuncActivatePro) == true)
+                    IconButton(
+                        onPressed: () {
+                          ref.watch(editfuncActivatePro.notifier).state = false;
+                        },
+                        icon: Text(
+                          cancelText,
+                          style: TextStyle(color: Colors.cyan.shade700),
+                        )),
+                  _popUpMenu(context, ref),
+                ]
+              : null,
         ),
         body: ListView.builder(
           itemCount: partList.length,
@@ -231,6 +234,7 @@ class HatimDetailsPage extends ConsumerWidget {
                         Flexible(
                           child: CustomButton(
                               btnText: deleteBtnText,
+                              textColor: Colors.white,
                               buttonBgColor: Colors.red,
                               onPressed: () async {
                                 await ref

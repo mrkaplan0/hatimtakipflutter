@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/individualspage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/listpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/prayandQuranpage.dart';
-import 'package:hatimtakipflutter/Views/homepage/navTabs/publicreadingpage.dart';
+import 'package:hatimtakipflutter/Views/homepage/navTabs/public_readingpage.dart';
 import 'package:hatimtakipflutter/Views/homepage/navTabs/settingspage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
@@ -24,6 +24,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+          selectedIconTheme: IconThemeData(size: 30, shadows: [
+            Shadow(
+                blurRadius: 4,
+                color: Colors.grey.shade300,
+                offset: const Offset(0, 3))
+          ]),
+          iconSize: 20,
           unselectedItemColor: Colors.grey,
           selectedItemColor: Colors.cyan,
           unselectedLabelStyle: const TextStyle(color: Colors.grey),
@@ -32,7 +39,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           onTap: _onItemTapped,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: const Icon(Icons.list), label: "Hatimler".tr()),
+                icon: const Icon(Icons.list_alt_outlined),
+                label: "Hatimler".tr()),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.person), label: "Bireysel".tr()),
             BottomNavigationBarItem(

@@ -214,7 +214,7 @@ class IndividualPage extends ConsumerWidget {
           .remainingPages
           .removeAt(0);
       ref.read(butnActvateListProv(i).notifier).makeTrue();
-      print(list[i].remainingPages);
+
       ref.invalidate(getMyIndividualParts);
       _updatePart(list[i], ref, context);
     } else {

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     PartsOfHatimViewModel.deviceLocale =
         context.deviceLocale.toString().substring(0, 2);
-    print(PartsOfHatimViewModel.deviceLocale);
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,

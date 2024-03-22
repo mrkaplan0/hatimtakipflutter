@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -181,7 +183,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           var createdUser =
               await ref.read(userViewModelProvider).signInWithAnonymously();
           if (createdUser != null) {
-            // ignore: use_build_context_synchronously
             if (mounted) {
               Navigator.of(context).popAndPushNamed("/RouterPage");
             }
@@ -197,7 +198,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           .read(userViewModelProvider)
           .signInWithEmailAndPassword(_email, _password);
       if (createdUser != null) {
-        // ignore: use_build_context_synchronously
         if (mounted) {
           Navigator.of(context).popAndPushNamed("/RouterPage");
         }

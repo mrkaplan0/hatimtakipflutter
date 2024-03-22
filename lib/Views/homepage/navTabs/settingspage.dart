@@ -73,7 +73,7 @@ class SettingsPage extends ConsumerWidget {
       try {
         Navigator.popAndPushNamed(context, "/RouterPage");
       } on Exception catch (e) {
-        print(e);
+        debugPrint(e.toString());
       }
     }
   }
