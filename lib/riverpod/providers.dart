@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Services/auth_service.dart';
 import 'package:hatimtakipflutter/Services/firestore_service.dart';
@@ -53,28 +53,25 @@ final fetchHatims = StreamProvider<List<Hatim>>((ref) => ref
 
 // for fetching parts of Hatim
 final fetchHatimParts =
-    StateProviderFamily<List<HatimPartModel>, Hatim>((ref, hatim) {
-  return hatim.partsOfHatimList;
+    StreamProviderFamily<List<PartModel>, Hatim>((ref, hatim) {
+  return ref.watch(firestoreProvider).fetchHatimParts(hatim);
 });
 
 // for fetching user`s parts
-final getMyIndividualParts = StateProvider<List<HatimPartModel>>((ref) {
-  List<HatimPartModel> myIndiviParts = [];
-  var myUser = ref.read(userViewModelProvider).user;
-  var hatimList = ref.watch(fetchHatims).value;
+final getMyIndividualParts = FutureProvider<List<PartModel>>((ref) async {
+  List<PartModel> list = await ref.read(firestoreProvider).fetchIndividualParts(
+      ref.watch(fetchHatims).value!, ref.read(userViewModelProvider).user!);
+  return list;
+});
 
-  if (hatimList != null) {
-    for (var hatim in hatimList) {
-      for (var part in hatim.partsOfHatimList) {
-        if (part.ownerOfPart?.id == myUser?.id) {
-          myIndiviParts.add(part);
-        }
-      }
-    }
-    myIndiviParts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
-  }
-
-  return myIndiviParts;
+// for listening myIndividualParts and reducing reading counts from database
+final myIndividualParts = StateProvider<List<PartModel>>((ref) {
+  var myIndiviParts = ref.watch(getMyIndividualParts);
+  List<PartModel> myParts = [];
+  myIndiviParts.whenData((parts) {
+    myParts = parts;
+  });
+  return myParts;
 });
 
 //in individual Page to activate undo button if page is deleted.
@@ -86,7 +83,7 @@ final butnActvateListProv =
 );
 
 final updateRemainingPagesProv =
-    AutoDisposeFutureProviderFamily<bool, HatimPartModel>((ref, part) async =>
+    AutoDisposeFutureProviderFamily<bool, PartModel>((ref, part) async =>
         await ref.read(firestoreProvider).updateRemainingPages(part));
 
 final onlyPublicHatims = StreamProvider<List<Hatim>>(

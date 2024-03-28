@@ -1,5 +1,6 @@
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 
 abstract class MyDatabaseDelegate {
@@ -10,7 +11,10 @@ abstract class MyDatabaseDelegate {
   Future<bool> createNewHatim(Hatim newHatim);
   Future<bool> deleteHatim(Hatim hatim);
   Stream<List<Hatim>> readHatimList(MyUser user);
-  Future<bool> updateOwnerOfPart(MyUser newOwner, HatimPartModel part);
-  Future<bool> updateRemainingPages(HatimPartModel part);
+  Stream<List<PartModel>> fetchHatimParts(Hatim hatim);
+  Future<List<PartModel>> fetchIndividualParts(
+      List<Hatim> hatimList, MyUser myUser);
+  Future<bool> updateOwnerOfPart(MyUser newOwner, PartModel part);
+  Future<bool> updateRemainingPages(PartModel part);
   Stream<List<Hatim>> fetchOnlyPublicHatims();
 }

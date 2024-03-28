@@ -3,7 +3,7 @@
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:uuid/uuid.dart';
 
-class HatimPartModel {
+class PartModel {
   String id = const Uuid().v4().toString();
   String hatimID;
   String hatimName;
@@ -13,7 +13,7 @@ class HatimPartModel {
   DateTime? deadline;
   bool isPrivate;
 
-  HatimPartModel({
+  PartModel({
     required this.id,
     required this.hatimID,
     required this.hatimName,
@@ -24,7 +24,7 @@ class HatimPartModel {
     required this.isPrivate,
   });
 
-  HatimPartModel.fromJson(Map<String, dynamic> json)
+  PartModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         hatimID = json['hatimID'],
         hatimName = json['hatimName'],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/listpage_hatimcard.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/publichatim_detailpage.dart';
+import 'package:hatimtakipflutter/Views/googleAds/banner.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
@@ -23,31 +24,37 @@ class PublicReadingPage extends ConsumerWidget {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: hatimList.when(
-          data: (hatimList) {
-            return ListView.builder(
-                itemCount: hatimList.length,
-                itemBuilder: (context, i) {
-                  var hatim = hatimList[i];
+      body: Stack(
+        children: [
+          hatimList.when(
+              data: (hatimList) {
+                return ListView.builder(
+                    itemCount: hatimList.length,
+                    itemBuilder: (context, i) {
+                      var hatim = hatimList[i];
 
-                  return GestureDetector(
-                    child: ListpageHatimCard(hatim: hatim),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            PublicHatimDetailPage(hatim: hatim))),
-                  );
-                });
-          },
-          error: error,
-          loading: loading),
+                      return GestureDetector(
+                        child: ListpageHatimCard(hatim: hatim),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    PublicHatimDetailPage(hatim: hatim))),
+                      );
+                    });
+              },
+              error: error,
+              loading: loading),
+          Align(alignment: Alignment.bottomCenter, child: MyBannerAdWidget())
+        ],
+      ),
     );
   }
 
-  Widget? error(Object error, StackTrace stackTrace) {
+  Widget error(Object error, StackTrace stackTrace) {
     return const Text('error');
   }
 
-  Widget? loading() {
+  Widget loading() {
     return const Center(child: CircularProgressIndicator());
   }
 }

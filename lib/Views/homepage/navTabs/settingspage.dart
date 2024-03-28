@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
+import 'package:hatimtakipflutter/Views/googleAds/banner.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
@@ -21,48 +22,41 @@ class SettingsPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    maxRadius: 70,
-                    child: Icon(
-                      Icons.person,
-                      size: 70,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    usernameText,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(ref.read(userViewModelProvider).user!.username),
-                ],
+              const CircleAvatar(
+                maxRadius: 70,
+                child: Icon(
+                  Icons.person,
+                  size: 70,
+                  color: Colors.black54,
+                ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text("Hatim Oku",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  const Text("Version: 1.0"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomButton(
-                      btnText: signOutbtnText,
-                      onPressed: () async {
-                        await ref
-                            .watch(userViewModelProvider)
-                            .signOut()
-                            .then((value) {
-                          goToRouterPage(value, context);
-                        });
-                      }),
-                ],
+              const SizedBox(
+                height: 10,
               ),
+              Text(
+                usernameText,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(ref.read(userViewModelProvider).user!.username),
+              const Spacer(),
+              const Text("Hatim Oku",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text("Version: 1.0"),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomButton(
+                  btnText: signOutbtnText,
+                  onPressed: () async {
+                    await ref
+                        .watch(userViewModelProvider)
+                        .signOut()
+                        .then((value) {
+                      goToRouterPage(value, context);
+                    });
+                  }),
+              const SizedBox(height: 10),
+              MyBannerAdWidget()
             ],
           ),
         ));

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_null_aware_operators
 
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 
 class Hatim {
@@ -11,7 +11,7 @@ class Hatim {
   bool isPrivate;
   DateTime? deadline;
   List<MyUser> participantsList;
-  List<HatimPartModel> partsOfHatimList;
+  List<PartModel> partsOfHatimList;
   DateTime? createdTime;
 
   Hatim(
@@ -35,8 +35,8 @@ class Hatim {
             json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
         participantsList = List<MyUser>.from(
             json['participantsList'].map((x) => MyUser.fromJson(x))),
-        partsOfHatimList = List<HatimPartModel>.from(
-            json['partsOfHatimList'].map((x) => HatimPartModel.fromJson(x))),
+        partsOfHatimList = List<PartModel>.from(
+            json['partsOfHatimList'].map((x) => PartModel.fromJson(x))),
         createdTime = DateTime.parse(json['createdTime']);
 
   Map<String, dynamic> toJson() {

@@ -2,7 +2,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/cuzfinishedpage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 import 'package:pdfx/pdfx.dart';
@@ -13,7 +13,7 @@ final previousPageButtonActivate = StateProvider<bool>((ref) => true);
 // ignore: must_be_immutable
 class QuranPage extends ConsumerStatefulWidget {
   int? initialPage = 0;
-  HatimPartModel? part;
+  PartModel? part;
 
   QuranPage({super.key, this.initialPage, this.part});
 

@@ -3,14 +3,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/Quranpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Viewmodels/listpage_cardmetods.dart';
+import 'package:hatimtakipflutter/Views/detail_pages/cuzfinishedpage.dart';
+import 'package:hatimtakipflutter/Views/googleAds/banner.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
-// ignore: must_be_immutable
-class IndividualPage extends ConsumerWidget {
-  IndividualPage({super.key});
+class IndividualPage extends ConsumerStatefulWidget {
+  const IndividualPage({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _IndividualPageState();
+}
+
+class _IndividualPageState extends ConsumerState<IndividualPage> {
   String noResponsibilityText =
       tr("Sorumlu olduğunuz cüz yok.\n Başka hatimlere katilmak icin tikla.");
   String seeOtherHatimsText = tr("Hatimleri Gör");
@@ -18,7 +24,8 @@ class IndividualPage extends ConsumerWidget {
   String remainingPageText = tr("Kalan Sayfalar");
   Timer? _timer;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final list = ref.watch(myIndividualParts);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -27,13 +34,24 @@ class IndividualPage extends ConsumerWidget {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: Consumer(builder: (context, ref, widget) {
-        final list = ref.watch(getMyIndividualParts);
-        if (list.isNotEmpty) {
-          return listWidget(context, list, ref);
-        } else {
-          return listNullWidget(ref);
-        }
+      body: Consumer(builder: (context, reff, w) {
+        return list.isNotEmpty
+            ? Stack(
+                children: [
+                  listWidget(context, list, reff),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: MyBannerAdWidget())
+                ],
+              )
+            : Stack(
+                children: [
+                  listNullWidget(ref),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: MyBannerAdWidget())
+                ],
+              );
       }),
     );
   }
@@ -59,7 +77,7 @@ class IndividualPage extends ConsumerWidget {
 
 //in list, we have a card. In Card you can reduce remainingPages and make undo.
   Column listWidget(
-      BuildContext context, List<HatimPartModel> list, WidgetRef ref) {
+      BuildContext context, List<PartModel> list, WidgetRef reff) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -73,8 +91,10 @@ class IndividualPage extends ConsumerWidget {
             shrinkWrap: false,
             itemCount: list.length,
             itemBuilder: (context, i) {
-              final showUndoButton = ref.watch(butnActvateListProv(i));
+              list.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+              final showUndoButton = reff.watch(butnActvateListProv(i));
               // if man finished to read part, there is no necessary to see this part`s card
+
               return list[i].remainingPages.isNotEmpty
                   ? SizedBox(
                       height: 120,
@@ -83,14 +103,14 @@ class IndividualPage extends ConsumerWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
-                              partsInfoWidget(ref, list, i),
+                              partsInfoWidget(reff, list, i),
                               Column(
                                 children: [
                                   showUndoButton == true
                                       ? IconButton(
                                           onPressed: () {
                                             undoButtonAction(
-                                                list, i, ref, context);
+                                                list, i, reff, context);
                                           },
                                           icon: const Icon(
                                               Icons.settings_backup_restore))
@@ -108,7 +128,7 @@ class IndividualPage extends ConsumerWidget {
                                       icon: const Icon(Icons.menu_book_sharp)),
                                 ],
                               ),
-                              reducingButton(ref, list, i),
+                              reducingButton(reff, list, i),
                             ],
                           ),
                         ),
@@ -122,9 +142,9 @@ class IndividualPage extends ConsumerWidget {
     );
   }
 
-  Widget reducingButton(WidgetRef ref, List<HatimPartModel> list, int i) {
+  Widget reducingButton(WidgetRef ref, List<PartModel> list, int i) {
     return Consumer(
-      builder: (context, ref, child) => Expanded(
+      builder: (kcontext, reff, child) => Expanded(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -146,11 +166,10 @@ class IndividualPage extends ConsumerWidget {
               child: InkWell(
                   borderRadius: BorderRadius.circular(8),
                   onTap: () {
-                    reducingButtonAction(list, i, ref, context);
+                    reducingButtonAction(list, i, reff, kcontext);
                   },
                   child: Center(
-                    child: Text(
-                        "${ref.watch(getMyIndividualParts)[i].remainingPages.length}"),
+                    child: Text("${list[i].remainingPages.length}"),
                   )),
             ),
           ),
@@ -159,7 +178,7 @@ class IndividualPage extends ConsumerWidget {
     );
   }
 
-  Expanded partsInfoWidget(WidgetRef ref, List<HatimPartModel> list, int i) {
+  Expanded partsInfoWidget(WidgetRef ref, List<PartModel> list, int i) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -183,67 +202,50 @@ class IndividualPage extends ConsumerWidget {
   }
 
 //this method update the database. we have a timer for the reducing writing counts to database.
-  void _updatePart(HatimPartModel part, WidgetRef ref, BuildContext context) {
+  void _updatePart(PartModel part, WidgetRef reff, BuildContext kcontext) {
+    int waitingSec = 2;
+    if (part.remainingPages.isEmpty) {
+      waitingSec = 0;
+    }
     _timer?.cancel(); // cancel timer
-    _timer = Timer(const Duration(seconds: 2), () {
-      try {
-        ref.read(updateRemainingPagesProv(part));
-        ref.invalidate(updateRemainingPagesProv);
-        ref.invalidate(getMyIndividualParts);
-      } catch (e) {
-        showDialog(
-            context: context,
-            builder: (dialogContext) {
-              return const Dialog(
-                child: AlertDialog(
-                  title: Text("Error"),
-                  content: Text('Data couldn`t be updated.'),
-                ),
-              );
-            });
+    _timer = Timer(Duration(seconds: waitingSec), () {
+      ref.read(updateRemainingPagesProv(part));
+      ref.invalidate(updateRemainingPagesProv);
+      ref.invalidate(getMyIndividualParts);
+      ref.invalidate(myIndividualParts);
+      if (part.remainingPages.isEmpty) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (kcontext) => const CuzFinishedPage(),
+            fullscreenDialog: true));
       }
     });
   }
 
   void reducingButtonAction(
-      List<HatimPartModel> list, int i, WidgetRef ref, BuildContext context) {
+      List<PartModel> list, int i, WidgetRef reff, BuildContext kcontext) {
     if (list[i].remainingPages.isNotEmpty) {
-      ref
-          .watch(getMyIndividualParts.notifier)
-          .state[i]
-          .remainingPages
-          .removeAt(0);
-      ref.read(butnActvateListProv(i).notifier).makeTrue();
+      ref.watch(myIndividualParts.notifier).state[i].remainingPages.removeAt(0);
 
-      ref.invalidate(getMyIndividualParts);
+      ref.read(butnActvateListProv(i).notifier).makeTrue();
       _updatePart(list[i], ref, context);
-    } else {
-      // Show Ad
+      ref.invalidate(myIndividualParts);
     }
   }
 
   void undoButtonAction(
-      List<HatimPartModel> list, int i, WidgetRef ref, BuildContext context) {
+      List<PartModel> list, int i, WidgetRef ref, BuildContext context) {
     if (list[i].remainingPages.isNotEmpty) {
       int firstItem = list[i].remainingPages.first;
-      ref
-          .watch(getMyIndividualParts.notifier)
-          .state[i]
-          .remainingPages
-          .insert(0, firstItem - 1);
+      list[i].remainingPages.insert(0, firstItem - 1);
 
       if (list[i].remainingPages.first == list[i].pages.first) {
         ref.read(butnActvateListProv(i).notifier).makeFalse();
       }
     } else {
-      ref
-          .watch(getMyIndividualParts.notifier)
-          .state[i]
-          .remainingPages
-          .add(list[i].pages.last);
+      list[i].remainingPages.add(list[i].pages.last);
     }
 
-    ref.invalidate(getMyIndividualParts);
+    ref.invalidate(myIndividualParts);
     _updatePart(list[i], ref, context);
   }
 }

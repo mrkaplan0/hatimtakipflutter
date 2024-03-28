@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -15,54 +15,63 @@ class PublicHatimDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final partList = ref.watch(fetchHatimParts(hatim));
-    partList.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+
     return Scaffold(
         appBar: AppBar(
           title: Text(hatim.hatimName ?? ''),
         ),
-        body: ListView.builder(
-          itemCount: partList.length,
-          itemBuilder: (context, i) {
-            return partList[i].ownerOfPart == null
-                ? Consumer(
-                    builder: (context, ref, child) {
-                      return SizedBox(
-                        height: 70,
-                        child: Card(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            partInfo(ref, partList, i),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: TextButton(
-                                  onPressed: () async {
-                                    await ref
-                                        .read(firestoreProvider)
-                                        .updateOwnerOfPart(
-                                            ref
-                                                .read(userViewModelProvider)
-                                                .user!,
-                                            partList[i]);
-                                    ref.invalidate(fetchHatims);
-                                    ref.invalidate(getMyIndividualParts);
-                                    ref.invalidate(navigationIndexProvider);
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(readButtonText)),
-                            )
-                          ],
-                        )),
-                      );
-                    },
-                  )
-                : const SizedBox();
-          },
-        ));
+        body: partList.when(
+            data: (parts) {
+              parts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
+              return ListView.builder(
+                itemCount: parts.length,
+                itemBuilder: (kcontext, i) {
+                  return parts[i].ownerOfPart == null
+                      ? Consumer(
+                          builder: (kcontext, ref, child) {
+                            return SizedBox(
+                              height: 70,
+                              child: Card(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  partInfo(ref, parts, i),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: TextButton(
+                                        onPressed: () async {
+                                          await updateOwnerOfPart(
+                                              ref, parts, i, context);
+                                        },
+                                        child: Text(readButtonText)),
+                                  )
+                                ],
+                              )),
+                            );
+                          },
+                        )
+                      : const SizedBox();
+                },
+              );
+            },
+            error: error,
+            loading: loading));
   }
 
-  Padding partInfo(WidgetRef ref, List<HatimPartModel> parts, int i) {
+  Future<void> updateOwnerOfPart(
+      WidgetRef ref, List<PartModel> parts, int i, BuildContext context) async {
+    var result = await ref
+        .read(firestoreProvider)
+        .updateOwnerOfPart(ref.read(userViewModelProvider).user!, parts[i]);
+
+    if (result) {
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+    }
+  }
+
+  Padding partInfo(WidgetRef ref, List<PartModel> parts, int i) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(

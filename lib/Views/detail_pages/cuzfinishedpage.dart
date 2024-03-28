@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
+import 'package:hatimtakipflutter/Views/googleAds/native_ad.dart';
 
 final isVisible = StateProvider.autoDispose<bool>((ref) => true);
 
@@ -53,6 +54,13 @@ class CuzFinishedPage extends ConsumerWidget {
                   ),
                 ),
               ],
+            ),
+            const Spacer(),
+            const Flexible(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: NativeExample(),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

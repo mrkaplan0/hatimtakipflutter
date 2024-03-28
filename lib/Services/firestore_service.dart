@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Services/delegate/database_delegate.dart';
 
@@ -83,6 +83,14 @@ class FirestoreService implements MyDatabaseDelegate {
       await docRefHatimList
           .doc(newHatim.id)
           .set(newHatim.toJson(), SetOptions(merge: true));
+
+      for (var part in newHatim.partsOfHatimList) {
+        await docRefHatimList
+            .doc(newHatim.id)
+            .collection(newHatim.id)
+            .doc(newHatim.id)
+            .set({part.id: part.toJson()}, SetOptions(merge: true));
+      }
       for (var usr in newHatim.participantsList) {
         await db
             .collection('Users')
@@ -129,29 +137,74 @@ class FirestoreService implements MyDatabaseDelegate {
   }
 
   @override
-  Future<bool> updateOwnerOfPart(MyUser newOwner, HatimPartModel part) async {
+  Stream<List<PartModel>> fetchHatimParts(Hatim hatim) {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
+
+    var querySnap = docRefHatimList
+        .doc(hatim.id)
+        .collection(hatim.id)
+        .doc(hatim.id)
+        .snapshots();
+    return querySnap.map((partsDoc) {
+      Map<String, dynamic>? partsMap = partsDoc.data();
+      List<PartModel> partsList = [];
+      partsMap!.forEach((key, value) {
+        partsList.add(PartModel.fromJson(value));
+      });
+      return partsList;
+    });
+  }
+
+  @override
+  Future<List<PartModel>> fetchIndividualParts(
+      List<Hatim> hatimList, MyUser myUser) async {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
+    List<PartModel> individualPartsList = [];
+    try {
+      for (var hatim in hatimList) {
+        var querySnap = await docRefHatimList
+            .doc(hatim.id)
+            .collection(hatim.id)
+            .doc(hatim.id)
+            .get();
+        Map<String, dynamic> data = querySnap.data() as Map<String, dynamic>;
+        var parts = data.values.map((e) => PartModel.fromJson(e));
+        for (var part in parts) {
+          part.ownerOfPart?.id == myUser.id
+              ? individualPartsList.add(part)
+              : null;
+        }
+      }
+      return individualPartsList;
+    } on Exception catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+  }
+
+  @override
+  Future<bool> updateOwnerOfPart(MyUser newOwner, PartModel part) async {
     final docRefHatimList =
         db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
+      part.ownerOfPart = newOwner;
       final userMap = newOwner.toJson();
-      final pubDocRef = docRefHatimList.doc(part.hatimID);
 
-      db.runTransaction((transaction) async {
-        final hatimData = await transaction.get(pubDocRef);
-        var newParticipantsList = hatimData.data()!["participantsList"];
-        newParticipantsList.add(userMap);
+      await docRefHatimList
+          .doc(part.hatimID)
+          .collection(part.hatimID)
+          .doc(part.hatimID)
+          .update({part.id: part.toJson()});
 
-        List partList = hatimData.data()!['partsOfHatimList'];
-        for (int i = 0; i < partList.length; i++) {
-          if (partList[i]["id"] == part.id) {
-            partList[i]["ownerOfPart"] = userMap;
-            transaction.update(pubDocRef, {
-              "participantsList": newParticipantsList,
-              'partsOfHatimList': partList
-            });
-            break;
-          }
-        }
+      final hatimData = await docRefHatimList.doc(part.hatimID).get();
+
+      var newParticipantsList = hatimData.data()!["participantsList"];
+      newParticipantsList.add(userMap);
+
+      await docRefHatimList.doc(part.hatimID).update({
+        "participantsList": newParticipantsList,
       });
     } catch (error) {
       debugPrint(error.toString());
@@ -161,28 +214,17 @@ class FirestoreService implements MyDatabaseDelegate {
   }
 
   @override
-  Future<bool> updateRemainingPages(HatimPartModel part) async {
+  Future<bool> updateRemainingPages(PartModel part) async {
     final docRefHatimList =
         db.collection('Hatimler').doc('MainLists').collection('HatimLists');
     try {
-      final pubDocRef = docRefHatimList.doc(part.hatimID);
-
-      db.runTransaction((transaction) async {
-        final snapshot = await transaction.get(pubDocRef);
-
-        List partList = snapshot.data()!['partsOfHatimList'];
-        for (int i = 0; i < partList.length; i++) {
-          if (partList[i]["id"] == part.id) {
-            partList[i]['remainingPages'] = part.remainingPages;
-            transaction.update(pubDocRef, {'partsOfHatimList': partList});
-            break;
-          }
-        }
-      }).then(
-        (value) => print("DocumentSnapshot successfully updated!"),
-        onError: (e) => print("Error updating document $e"),
-      );
+      await docRefHatimList
+          .doc(part.hatimID)
+          .collection(part.hatimID)
+          .doc(part.hatimID)
+          .set({part.id: part.toJson()}, SetOptions(merge: true));
     } catch (error) {
+      print("errrr $error");
       return false;
     }
     return true;

@@ -47,6 +47,7 @@ dependencies:
   pdfx: ^2.6.0
   easy_localization: ^3.0.5
   wakelock_plus: ^1.1.4
+  google_mobile_ads: ^5.0.0
 
 dev_dependencies:
   flutter_test:

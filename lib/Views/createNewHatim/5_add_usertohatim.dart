@@ -3,7 +3,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
@@ -21,7 +21,7 @@ enum FromPage { cuzSettings, hatimDetails }
 class AddUserToHatimPage extends ConsumerWidget {
   FromPage fromPage;
   int selectedPartIndex;
-  HatimPartModel? part;
+  PartModel? part;
   AddUserToHatimPage(
       {super.key,
       required this.selectedPartIndex,
@@ -65,6 +65,7 @@ class AddUserToHatimPage extends ConsumerWidget {
                       ref.read(hatimPartsProvider).updateOwnerOfPart(
                           selectedPartIndex, ref.watch(filteredUsers)[index]);
                     } else if (fromPage == FromPage.hatimDetails) {
+                      part!.ownerOfPart = ref.watch(filteredUsers)[index];
                       await ref.read(firestoreProvider).updateOwnerOfPart(
                           ref.watch(filteredUsers)[index], part!);
                       ref.invalidate(fetchHatimParts);

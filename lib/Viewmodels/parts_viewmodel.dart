@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:hatimtakipflutter/Models/hatimmodel.dart';
-import 'package:hatimtakipflutter/Models/hatimpartmodel.dart';
+import 'package:hatimtakipflutter/Models/partmodel.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 
 class PartsOfHatimViewModel extends ChangeNotifier {
@@ -47,7 +47,7 @@ class PartsOfHatimViewModel extends ChangeNotifier {
     cuz29,
     cuz30
   ];
-  List<HatimPartModel> allParts = [
+  List<PartModel> allParts = [
     c1,
     c2,
     c3,
@@ -96,7 +96,7 @@ class PartsOfHatimViewModel extends ChangeNotifier {
     allParts.clear();
 
     for (int i = 0; i < 30; i++) {
-      HatimPartModel a = HatimPartModel(
+      PartModel a = PartModel(
           hatimID: hatim.id,
           hatimName: hatim.hatimName!,
           pages: parts[i],
@@ -120,7 +120,7 @@ class PartsOfHatimViewModel extends ChangeNotifier {
   }
 
   void splitPart(int indexOfSelectedPart, int pagenumberWeSplitted) {
-    HatimPartModel newCreatedPart = HatimPartModel(
+    PartModel newCreatedPart = PartModel(
         hatimID: "",
         hatimName: "",
         pages: [],
@@ -913,7 +913,7 @@ List<int> cuz30 = [
   603
 ];
 
-HatimPartModel c1 = HatimPartModel(
+PartModel c1 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -922,7 +922,7 @@ HatimPartModel c1 = HatimPartModel(
     remainingPages: cuz1,
     deadline: null,
     isPrivate: false);
-HatimPartModel c2 = HatimPartModel(
+PartModel c2 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -931,7 +931,7 @@ HatimPartModel c2 = HatimPartModel(
     remainingPages: cuz2,
     deadline: null,
     isPrivate: false);
-HatimPartModel c3 = HatimPartModel(
+PartModel c3 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -940,7 +940,7 @@ HatimPartModel c3 = HatimPartModel(
     remainingPages: cuz3,
     deadline: null,
     isPrivate: false);
-HatimPartModel c4 = HatimPartModel(
+PartModel c4 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -949,7 +949,7 @@ HatimPartModel c4 = HatimPartModel(
     remainingPages: cuz4,
     deadline: null,
     isPrivate: false);
-HatimPartModel c5 = HatimPartModel(
+PartModel c5 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -958,7 +958,7 @@ HatimPartModel c5 = HatimPartModel(
     remainingPages: cuz5,
     deadline: null,
     isPrivate: false);
-HatimPartModel c6 = HatimPartModel(
+PartModel c6 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -967,7 +967,7 @@ HatimPartModel c6 = HatimPartModel(
     remainingPages: cuz6,
     deadline: null,
     isPrivate: false);
-HatimPartModel c7 = HatimPartModel(
+PartModel c7 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -976,7 +976,7 @@ HatimPartModel c7 = HatimPartModel(
     remainingPages: cuz7,
     deadline: null,
     isPrivate: false);
-HatimPartModel c8 = HatimPartModel(
+PartModel c8 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -985,7 +985,7 @@ HatimPartModel c8 = HatimPartModel(
     remainingPages: cuz8,
     deadline: null,
     isPrivate: false);
-HatimPartModel c9 = HatimPartModel(
+PartModel c9 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -994,7 +994,7 @@ HatimPartModel c9 = HatimPartModel(
     remainingPages: cuz9,
     deadline: null,
     isPrivate: false);
-HatimPartModel c10 = HatimPartModel(
+PartModel c10 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1003,7 +1003,7 @@ HatimPartModel c10 = HatimPartModel(
     remainingPages: cuz10,
     deadline: null,
     isPrivate: false);
-HatimPartModel c11 = HatimPartModel(
+PartModel c11 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1012,7 +1012,7 @@ HatimPartModel c11 = HatimPartModel(
     remainingPages: cuz11,
     deadline: null,
     isPrivate: false);
-HatimPartModel c12 = HatimPartModel(
+PartModel c12 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1021,7 +1021,7 @@ HatimPartModel c12 = HatimPartModel(
     remainingPages: cuz12,
     deadline: null,
     isPrivate: false);
-HatimPartModel c13 = HatimPartModel(
+PartModel c13 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1030,7 +1030,7 @@ HatimPartModel c13 = HatimPartModel(
     remainingPages: cuz13,
     deadline: null,
     isPrivate: false);
-HatimPartModel c14 = HatimPartModel(
+PartModel c14 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1039,7 +1039,7 @@ HatimPartModel c14 = HatimPartModel(
     remainingPages: cuz14,
     deadline: null,
     isPrivate: false);
-HatimPartModel c15 = HatimPartModel(
+PartModel c15 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1048,7 +1048,7 @@ HatimPartModel c15 = HatimPartModel(
     remainingPages: cuz15,
     deadline: null,
     isPrivate: false);
-HatimPartModel c16 = HatimPartModel(
+PartModel c16 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1057,7 +1057,7 @@ HatimPartModel c16 = HatimPartModel(
     remainingPages: cuz16,
     deadline: null,
     isPrivate: false);
-HatimPartModel c17 = HatimPartModel(
+PartModel c17 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1066,7 +1066,7 @@ HatimPartModel c17 = HatimPartModel(
     remainingPages: cuz17,
     deadline: null,
     isPrivate: false);
-HatimPartModel c18 = HatimPartModel(
+PartModel c18 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1075,7 +1075,7 @@ HatimPartModel c18 = HatimPartModel(
     remainingPages: cuz18,
     deadline: null,
     isPrivate: false);
-HatimPartModel c19 = HatimPartModel(
+PartModel c19 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1084,7 +1084,7 @@ HatimPartModel c19 = HatimPartModel(
     remainingPages: cuz19,
     deadline: null,
     isPrivate: false);
-HatimPartModel c20 = HatimPartModel(
+PartModel c20 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1093,7 +1093,7 @@ HatimPartModel c20 = HatimPartModel(
     remainingPages: cuz20,
     deadline: null,
     isPrivate: false);
-HatimPartModel c21 = HatimPartModel(
+PartModel c21 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1102,7 +1102,7 @@ HatimPartModel c21 = HatimPartModel(
     remainingPages: cuz21,
     deadline: null,
     isPrivate: false);
-HatimPartModel c22 = HatimPartModel(
+PartModel c22 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1111,7 +1111,7 @@ HatimPartModel c22 = HatimPartModel(
     remainingPages: cuz22,
     deadline: null,
     isPrivate: false);
-HatimPartModel c23 = HatimPartModel(
+PartModel c23 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1120,7 +1120,7 @@ HatimPartModel c23 = HatimPartModel(
     remainingPages: cuz23,
     deadline: null,
     isPrivate: false);
-HatimPartModel c24 = HatimPartModel(
+PartModel c24 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1129,7 +1129,7 @@ HatimPartModel c24 = HatimPartModel(
     remainingPages: cuz24,
     deadline: null,
     isPrivate: false);
-HatimPartModel c25 = HatimPartModel(
+PartModel c25 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1138,7 +1138,7 @@ HatimPartModel c25 = HatimPartModel(
     remainingPages: cuz25,
     deadline: null,
     isPrivate: false);
-HatimPartModel c26 = HatimPartModel(
+PartModel c26 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.id",
     hatimName: "hatim.hatimName",
@@ -1147,7 +1147,7 @@ HatimPartModel c26 = HatimPartModel(
     remainingPages: cuz26,
     deadline: null,
     isPrivate: false);
-HatimPartModel c27 = HatimPartModel(
+PartModel c27 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.hatimID",
     hatimName: "hatim.hatimName",
@@ -1156,7 +1156,7 @@ HatimPartModel c27 = HatimPartModel(
     remainingPages: cuz27,
     deadline: null,
     isPrivate: false);
-HatimPartModel c28 = HatimPartModel(
+PartModel c28 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.hatimID",
     hatimName: "hatim.hatimName",
@@ -1165,7 +1165,7 @@ HatimPartModel c28 = HatimPartModel(
     remainingPages: cuz28,
     deadline: null,
     isPrivate: false);
-HatimPartModel c29 = HatimPartModel(
+PartModel c29 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.hatimID",
     hatimName: "hatim.hatimName",
@@ -1174,7 +1174,7 @@ HatimPartModel c29 = HatimPartModel(
     remainingPages: cuz29,
     deadline: null,
     isPrivate: false);
-HatimPartModel c30 = HatimPartModel(
+PartModel c30 = PartModel(
     id: const Uuid().v4().toString(),
     hatimID: "hatim.hatimID",
     hatimName: "hatim.hatimName",
