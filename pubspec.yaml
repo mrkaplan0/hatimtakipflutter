@@ -37,8 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.5.1
   firebase_auth: ^4.17.9
-  cloud_firestore: ^4.15.9
-  firebase_core: ^2.24.1
+  cloud_firestore: ^4.15.10
+  firebase_core: ^2.28.0
   firebase_analytics: ^10.8.10
   page_view_indicators: ^2.0.0
   intl: ^0.18.1
