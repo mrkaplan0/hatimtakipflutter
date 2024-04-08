@@ -2,7 +2,7 @@
 {
     "Bitis Tarihi": "Date de fin : {}",
     "Süre siniri yok.": "Pas de limite de temps.",
-    "Süre Bitti.": "Le temps est terminé.",
+    "Süre bitti. gün sonra silinecek": "Le temps est écoulé. Hatim sera supprimé. Jours restants : {}",
     "Okuyan:": "Lecteur: {}",
     "Tebrikler": "Félicitations",
     "Cüzünüzü tamamladiniz.": "Vous avez terminé votre juz.",
@@ -91,5 +91,9 @@
     "Kisi ata": "Assigner un lecteur",
     "Lutfen bekleyin...": "Attendez s'il vous plaît...",
     "Onayla" : "Confirmer",
-    "Bu sayfa tamamlandi mi?":"Avez-vous lu cette page?"
+    "Bu sayfa tamamlandi mi?":"Avez-vous lu cette page?",
+    "Gecerli Gizlilik Ayariniz: " : "Votre paramètre de confidentialité actuel : ",
+    "Gizlilik Ayarlari" : "Paramètres de confidentialité",
+    "Sanirim burada cüz kalmadi.": "Il n'y a plus de Juz ici.",
+    "Uppss!":"Uppss!"
     }

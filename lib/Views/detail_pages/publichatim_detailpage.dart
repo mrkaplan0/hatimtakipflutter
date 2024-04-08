@@ -23,11 +23,17 @@ class PublicHatimDetailPage extends ConsumerWidget {
         body: partList.when(
             data: (parts) {
               parts.sort((a, b) => a.pages.first.compareTo(b.pages.first));
-              return ListView.builder(
-                itemCount: parts.length,
-                itemBuilder: (kcontext, i) {
-                  return parts[i].ownerOfPart == null
-                      ? Consumer(
+              List<PartModel> filteredList = [];
+              for (var part in parts) {
+                if (part.ownerOfPart == null) {
+                  filteredList.add(part);
+                }
+              }
+              return filteredList.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: filteredList.length,
+                      itemBuilder: (kcontext, i) {
+                        return Consumer(
                           builder: (kcontext, ref, child) {
                             return SizedBox(
                               height: 70,
@@ -36,13 +42,13 @@ class PublicHatimDetailPage extends ConsumerWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  partInfo(ref, parts, i),
+                                  partInfo(ref, filteredList, i),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 15.0),
                                     child: TextButton(
                                         onPressed: () async {
                                           await updateOwnerOfPart(
-                                              ref, parts, i, context);
+                                              ref, filteredList, i, context);
                                         },
                                         child: Text(readButtonText)),
                                   )
@@ -50,10 +56,22 @@ class PublicHatimDetailPage extends ConsumerWidget {
                               )),
                             );
                           },
-                        )
-                      : const SizedBox();
-                },
-              );
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Uppss!".tr(),
+                            style: const TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          Text("Sanirim burada cüz kalmadi.".tr()),
+                        ],
+                      ),
+                    );
             },
             error: error,
             loading: loading));

@@ -88,3 +88,7 @@ final updateRemainingPagesProv =
 
 final onlyPublicHatims = StreamProvider<List<Hatim>>(
     (ref) => ref.watch(firestoreProvider).fetchOnlyPublicHatims());
+final changePrivacy = FutureProviderFamily<bool, Hatim>((ref, hatim) async =>
+    await ref
+        .read(firestoreProvider)
+        .changeHatimPrivacySettings(hatim, hatim.isPrivate));

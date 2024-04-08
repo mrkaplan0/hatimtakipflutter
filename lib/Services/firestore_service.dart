@@ -244,4 +244,17 @@ class FirestoreService implements MyDatabaseDelegate {
       return const Stream.empty();
     }
   }
+
+  @override
+  Future<bool> changeHatimPrivacySettings(Hatim hatim, bool isPrivacy) async {
+    final docRefHatimList =
+        db.collection('Hatimler').doc('MainLists').collection('HatimLists');
+    try {
+      await docRefHatimList.doc(hatim.id).update({"isPrivate": isPrivacy});
+    } catch (error) {
+      debugPrint(error.toString());
+      return false;
+    }
+    return true;
+  }
 }

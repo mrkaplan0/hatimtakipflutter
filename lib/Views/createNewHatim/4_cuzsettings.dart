@@ -32,6 +32,14 @@ class CuzSettingsPage extends ConsumerWidget {
     final list = ref.watch(hatimPartsProvider).allParts;
     return Scaffold(
         appBar: AppBar(
+          leadingWidth: 100,
+          leading: TextButton(
+              onPressed: () {
+                ref.invalidate(newHatimProvider);
+                ref.invalidate(hatimPartsProvider);
+                Navigator.pop(context);
+              },
+              child: Text("Iptal".tr())),
           automaticallyImplyLeading: false,
           title: Text(appBarTitle),
           actions: [

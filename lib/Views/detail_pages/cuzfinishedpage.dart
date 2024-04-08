@@ -16,63 +16,65 @@ class CuzFinishedPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: Consumer(builder: (context, ref, w) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset("assets/images/havaifisek.jpg")),
-                ),
-                AnimatedOpacity(
-                  opacity: ref.watch(isVisible) ? 1.0 : 0.0,
-                  duration: const Duration(seconds: 1),
-                  child: Text(
-                    "Tebrikler".tr(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        shadows: <Shadow>[Shadow(blurRadius: 15)]),
+      body: SafeArea(
+        child: Consumer(builder: (context, ref, w) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset("assets/images/havaifisek.jpg")),
                   ),
-                ),
-                AnimatedOpacity(
-                  opacity: ref.watch(isVisible) ? 0.0 : 1.0,
-                  duration: const Duration(seconds: 1),
-                  child: Text(
-                    "Cüzünüzü tamamladiniz.".tr(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        shadows: <Shadow>[Shadow(blurRadius: 15)]),
+                  AnimatedOpacity(
+                    opacity: ref.watch(isVisible) ? 1.0 : 0.0,
+                    duration: const Duration(seconds: 1),
+                    child: Text(
+                      "Tebrikler".tr(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          shadows: <Shadow>[Shadow(blurRadius: 15)]),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            const Flexible(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: NativeExample(),
+                  AnimatedOpacity(
+                    opacity: ref.watch(isVisible) ? 0.0 : 1.0,
+                    duration: const Duration(seconds: 1),
+                    child: Text(
+                      "Cüzünüzü tamamladiniz.".tr(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          shadows: <Shadow>[Shadow(blurRadius: 15)]),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomButton(
-                  btnText: "Kapat".tr(),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, "/");
-                  }),
-            )
-          ],
-        );
-      }),
+              const Spacer(),
+              const Flexible(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: NativeExample(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomButton(
+                    btnText: "Kapat".tr(),
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, "/");
+                    }),
+              )
+            ],
+          );
+        }),
+      ),
     );
   }
 }

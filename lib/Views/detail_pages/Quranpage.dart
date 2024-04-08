@@ -61,36 +61,38 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             Navigator.pop(context);
           }
         },
-        child: Scaffold(
-          backgroundColor: Colors.grey,
-          body: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              PdfView(
-                controller: _pdfController,
-                scrollDirection: Axis.horizontal,
-                reverse: true,
-                pageSnapping: false,
-                physics: const NeverScrollableScrollPhysics(),
-                onDocumentLoaded: (document) {
-                  setState(() {
-                    _allPagesCount = document.pagesCount;
-                  });
-                },
-                onPageChanged: (page) {
-                  setState(() {
-                    _actualPageNumber = page;
-                  });
-                },
-              ),
-              backButtonWidget(context),
-              prevAndNextButtonWidget()
-            ],
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.grey,
+            body: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                PdfView(
+                  controller: _pdfController,
+                  scrollDirection: Axis.horizontal,
+                  reverse: true,
+                  pageSnapping: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onDocumentLoaded: (document) {
+                    setState(() {
+                      _allPagesCount = document.pagesCount;
+                    });
+                  },
+                  onPageChanged: (page) {
+                    setState(() {
+                      _actualPageNumber = page;
+                    });
+                  },
+                ),
+                backButtonWidget(context),
+                prevAndNextButtonWidget(),
+              ],
+            ),
           ),
         ));
   }
 
-  Align prevAndNextButtonWidget() {
+  Widget prevAndNextButtonWidget() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(

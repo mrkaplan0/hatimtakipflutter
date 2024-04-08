@@ -1,7 +1,7 @@
 {
 "Bitis Tarihi" : "Bitiş Tarihi: {} ",
 "Süre siniri yok." : "Süre sınırı yok.",
-"Süre Bitti." : " Süre doldu.",
+"Süre bitti. gün sonra silinecek" : "Süre bitti. Hatim {} gün sonra silinecek.",
 "Okuyan:" : "Okuyan: {}",
 "Tebrikler" : "Tebrikler",
 "Cüzünüzü tamamladiniz." : "Cüzünüzü tamamladınız.",
@@ -91,5 +91,9 @@
 "Kisi ata" : "Kişi ata",
 "Lutfen bekleyin..." : "Lütfen bekleyin...",
 "Onayla" : "Onayla",
-"Bu sayfa tamamlandi mi?":"Bu sayfayı okudunuz mu?"
+"Bu sayfa tamamlandi mi?":"Bu sayfayı okudunuz mu?",
+"Gecerli Gizlilik Ayariniz: " : "Geçerli Gizlilik Ayarınız: ",
+"Gizlilik Ayarlari" : "Gizlilik Ayarları",
+"Sanirim burada cüz kalmadi.": "Burada daha fazla cüz yok.",
+"Uppss!":"Uppss!"
 }

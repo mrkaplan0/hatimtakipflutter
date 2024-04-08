@@ -1,7 +1,7 @@
 {
     "Bitis Tarihi": "End Date: {}",
     "Süre siniri yok.": "No time limit.",
-    "Süre Bitti.": "Time is up.",
+    "Süre bitti. gün sonra silinecek": "Time is up. Hatim will be deleted. Remaining days : {}",
     "Okuyan:": "Reader: {}",
     "Tebrikler": "Congratulations",
     "Cüzünüzü tamamladiniz.": "You completed your part.",
@@ -18,7 +18,7 @@
     "Hesabiniz yok mu?": "Don't have an account?",
     "Kaydolun": "Sign up",
     "Üye Olmadan Devam Et": "Continue without Membership",
-    "Kisileri Düzenle": "Edit Contacts",
+    "Kisileri Düzenle": "Edit Members",
     "Düzenlemek istediginiz cüzü secin.": "Select the part you want to edit.",
     "Iptal": "Cancel",
     "Kisi Ekle / Degistir": "Add / Change Member",
@@ -90,6 +90,10 @@
     "Kisi ata": "Assign Reader",
     "Lutfen bekleyin...": "Please wait...",
     "Onayla" : "Confirm",
-    "Bu sayfa tamamlandi mi?":"Have you read this page?"
+    "Bu sayfa tamamlandi mi?":"Have you read this page?",
+    "Gecerli Gizlilik Ayariniz: " : "Your Current Privacy Setting: ",
+    "Gizlilik Ayarlari" : "Privacy Settings",
+    "Sanirim burada cüz kalmadi.": "There's no more parts here.",
+    "Uppss!":"Uppss!"
   }
   

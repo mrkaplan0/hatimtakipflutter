@@ -1,7 +1,7 @@
 {
     "Bitis Tarihi": "تاريخ الانتهاء: {}",
     "Süre siniri yok.": "لا يوجد حد زمني.",
-    "Süre Bitti.": "انتهت المدة الزمنية.",
+    "Süre bitti. gün sonra silinecek": "انتهى الوقت. سيتم حذفه بعد {} أيام.",
     "Okuyan:": "القارئ: {}",
     "Tebrikler": "مبروك",
     "Cüzünüzü tamamladiniz.": "لقد أكملت جزءك.",
@@ -90,5 +90,9 @@
     "Kisi ata": "تعيين شخص",
     "Lutfen bekleyin...": "يرجى الانتظار...",
     "Onayla" : "تأكيد",
-    "Bu sayfa tamamlandi mi?":"هل قرأت هذه الصفحة؟"
+    "Bu sayfa tamamlandi mi?":"هل قرأت هذه الصفحة؟",
+    "Gecerli Gizlilik Ayariniz: " : "إعداد الخصوصية الحالي لديك: ",
+    "Gizlilik Ayarlari" : "إعدادات الخصوصية",
+    "Sanirim burada cüz kalmadi.": "لا يوجد جزء آخر هنا.",
+    "Uppss!":"!!!"
   }

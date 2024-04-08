@@ -17,4 +17,5 @@ abstract class MyDatabaseDelegate {
   Future<bool> updateOwnerOfPart(MyUser newOwner, PartModel part);
   Future<bool> updateRemainingPages(PartModel part);
   Stream<List<Hatim>> fetchOnlyPublicHatims();
+  Future<bool> changeHatimPrivacySettings(Hatim hatim, bool isPrivacy);
 }

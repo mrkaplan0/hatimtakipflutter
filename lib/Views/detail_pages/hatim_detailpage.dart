@@ -23,6 +23,8 @@ class HatimDetailsPage extends ConsumerWidget {
   String warningTitle = tr("Uyari");
 
   String warningInfo = tr("Hatmi silmek istediginizden emin misiniz?");
+
+  String changePrivacyText = tr("Gizlilik Ayarlari");
   HatimDetailsPage({super.key, required this.hatim});
 
   @override
@@ -155,6 +157,25 @@ class HatimDetailsPage extends ConsumerWidget {
   _popUpMenu(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<int>(
       itemBuilder: (context) => [
+        // popupmenu item 0: change Privacy
+        PopupMenuItem(
+          value: 0,
+          child: Row(
+            children: [
+              Icon(
+                Icons.lock_open,
+                color: Colors.cyan.shade200,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(changePrivacyText)
+            ],
+          ),
+          onTap: () {
+            _showPrivacyChangeDialog(context, ref);
+          },
+        ),
         // popupmenu item 1: edit users
         PopupMenuItem(
           value: 1,
@@ -280,5 +301,55 @@ class HatimDetailsPage extends ConsumerWidget {
     double rate = difference.toDouble() / all.toDouble();
 
     return rate;
+  }
+
+  _showPrivacyChangeDialog(BuildContext context, WidgetRef ref) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Hatime kimler erisebilsin?".tr()),
+          content: SizedBox(
+            height: 50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Gecerli Gizlilik Ayariniz: ".tr()),
+                hatim.isPrivate
+                    ? Text(
+                        "Sadece Sectigim Kisiler".tr(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      )
+                    : Text(
+                        "Herkes".tr(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      )
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  hatim.isPrivate = !hatim.isPrivate;
+                  ref.read(changePrivacy(hatim));
+
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Icon(Icons.check_box, color: Colors.green)));
+                },
+                child: Text(hatim.isPrivate
+                    ? "Herkes".tr()
+                    : "Sadece Sectigim Kisiler".tr())),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Iptal".tr()))
+          ],
+        );
+      },
+    );
   }
 }
