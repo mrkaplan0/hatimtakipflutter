@@ -35,6 +35,7 @@ class ListpageHatimCard extends ConsumerWidget {
                       radius: 16.0,
                       lineWidth: 5.0,
                       animation: true,
+                      animationDuration: 800,
                       backgroundColor: Colors.grey,
                       progressColor: ListCardMetods.setCPIndicatorColor(rate),
                       //strokeWidth: 7,

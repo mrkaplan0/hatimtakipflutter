@@ -36,7 +36,7 @@ class ListCardMetods {
       return remainingDay.inDays;
     } else {
       var remainingDay = hatim.createdTime!.difference(DateTime.now());
-// for any hatim, max. 3 years from createdTime, then delete to hatim.
+// for any hatim, max. 3 years from createdTime, then delete hatim.
       return 1090 + remainingDay.inDays;
     }
   }
