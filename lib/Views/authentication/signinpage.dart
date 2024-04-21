@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/myuser.dart';
 import 'package:hatimtakipflutter/Views/Widgets/custom_button.dart';
+import 'package:hatimtakipflutter/main.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 
 // ignore: must_be_immutable
@@ -23,6 +25,7 @@ class SignInPage extends ConsumerWidget {
   final String _usernameNotUsableText = tr(
       "Bu kullanici adi kullaniliyor! / Kullanici adi alani bos birakilamaz.");
   final String _usernameCanNotNilText = tr("Bu alan bos birakilamaz.");
+  final String _signInAnonymouslyText = tr("Üye Olmadan Devam Et");
   List<MyUser> userList = [];
 
   final _formKey = GlobalKey<FormState>();
@@ -76,7 +79,13 @@ class SignInPage extends ConsumerWidget {
                             onPressed: () async {
                               saveUser(context, ref);
                             }),
+
                         const SizedBox(height: 20),
+
+                        const Text("&"),
+
+                        //signIn anonymously
+                        signInAnonymoslyButton(context, ref),
                       ],
                     ),
                   ),
@@ -175,19 +184,75 @@ class SignInPage extends ConsumerWidget {
     );
   }
 
+  TextButton signInAnonymoslyButton(BuildContext context, WidgetRef ref) {
+    return TextButton(
+        onPressed: () async {
+          var createdUser =
+              await ref.read(userViewModelProvider).signInWithAnonymously();
+          if (createdUser != null) {
+            if (context.mounted) {
+              Navigator.of(context).popAndPushNamed("/RouterPage");
+            }
+          }
+        },
+        child: Text(_signInAnonymouslyText));
+  }
+
   saveUser(BuildContext context, WidgetRef ref) async {
-    if (_formKey.currentState!.validate() &&
-        ref.watch(isUsernameNotAvailableProv.notifier).state == false &&
-        _controller.text.isNotEmpty) {
-      _username = _controller.text;
-      _formKey.currentState?.save();
-      var createdUser = await ref
-          .read(userViewModelProvider)
-          .createUserWithEmailAndPassword(_email, _password, _username);
-      if (createdUser != null) {
-        // ignore: use_build_context_synchronously
-        Navigator.popAndPushNamed(context, '/RouterPage');
+    try {
+      if (_formKey.currentState!.validate() &&
+          ref.watch(isUsernameNotAvailableProv.notifier).state == false &&
+          _controller.text.isNotEmpty) {
+        _username = _controller.text;
+        _formKey.currentState?.save();
+        var createdUser = await ref
+            .read(userViewModelProvider)
+            .createUserWithEmailAndPassword(_email, _password, _username);
+        if (createdUser != null) {
+          // ignore: use_build_context_synchronously
+          Navigator.popAndPushNamed(context, '/RouterPage');
+        }
       }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = _getErrorMessage(e);
+      _showErrorDialog(context, errorMessage);
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: rootNavigatorKey.currentContext!,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Hata'.tr() + "!"),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Kapat".tr()))
+          ],
+        );
+      },
+    );
+  }
+
+  String _getErrorMessage(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No user found with this email.'.tr();
+      case 'wrong-password':
+        return 'Incorrect password.'.tr();
+      case 'invalid-email':
+        return 'Invalid email address.'.tr();
+      case 'user-disabled':
+        return 'This user account has been disabled.'.tr();
+      case 'email-already-in-use':
+        return 'The email has already been registered. Please login or reset your password.'
+            .tr();
+      default:
+        return 'An error occurred: ${e.message}';
     }
   }
 }

@@ -95,5 +95,10 @@
 "Gecerli Gizlilik Ayariniz: " : "Geçerli Gizlilik Ayarınız: ",
 "Gizlilik Ayarlari" : "Gizlilik Ayarları",
 "Sanirim burada cüz kalmadi.": "Burada daha fazla cüz yok.",
-"Uppss!":"Uppss!"
+"Uppss!":"Uppss!",
+  "No user found with this email." : "Bu maille kayıtlı herhangi bir üye bulunamadı.",
+  "Incorrect password." : "Hatalı şifre girdiniz.",
+  "Invalid email address." : "Geçersiz E-Mail Adresi!",
+  "user-disabled" : "Hesabınız donduruldu.",
+  "The email has already been registered. Please login or reset your password." : "Bu Email zaten kayıtlı. Lütfen giriş yapın veya şifrenizi sıfırlayın. "
 }

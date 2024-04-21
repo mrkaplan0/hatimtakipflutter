@@ -94,5 +94,10 @@
   "Gecerli Gizlilik Ayariniz: " : "Ihre aktuellen Datenschutzeinstellungen: ",
   "Gizlilik Ayarlari" : "Datenschutzeinstellungen",
   "Sanirim burada cüz kalmadi.": "Hier gibt es keine Juzs mehr.",
-  "Uppss!":"Uppss!"
+  "Uppss!":"Uppss!",
+    "No user found with this email." : "Kein Nutzer mit dieser E-Mail gefunden.",
+    "Incorrect password." : "Das Passwort ist falsch.",
+    "Invalid email address." : "Ungültige E-Mail Adresse.",
+    "user-disabled" : "Nutzer ist deaktiviert.",
+    "The email has already been registered. Please login or reset your password." : "Die E-Mail wurde bereits registriert. Bitte melden Sie sich an oder setzen Sie Ihr Passwort zurück."
 }

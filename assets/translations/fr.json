@@ -95,5 +95,11 @@
     "Gecerli Gizlilik Ayariniz: " : "Votre paramètre de confidentialité actuel : ",
     "Gizlilik Ayarlari" : "Paramètres de confidentialité",
     "Sanirim burada cüz kalmadi.": "Il n'y a plus de Juz ici.",
-    "Uppss!":"Uppss!"
+    "Uppss!":"Uppss!",
+    "No user found with this email." : "Aucun utilisateur n'a été trouvé avec cet email.",
+    "Incorrect password." : "Le mot de passe est incorrect.",
+    "Invalid email address." : "Adresse électronique non valide.",
+    "user-disabled" : "L'utilisateur est désactivé.",
+    "The email has already been registered. Please login or reset your password." : "L'e-mail a déjà été enregistré. Veuillez vous connecter ou réinitialiser votre mot de passe."
+
     }

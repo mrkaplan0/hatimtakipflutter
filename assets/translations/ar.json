@@ -94,5 +94,10 @@
     "Gecerli Gizlilik Ayariniz: " : "إعداد الخصوصية الحالي لديك: ",
     "Gizlilik Ayarlari" : "إعدادات الخصوصية",
     "Sanirim burada cüz kalmadi.": "لا يوجد جزء آخر هنا.",
-    "Uppss!":"!!!"
+    "Uppss!":"!!!",
+    "No user found with this email." : "لم يتم العثور على مستخدم مع هذا البريد الإلكتروني.",
+    "Incorrect password." : "كلمة مرور غير صحيحة.",
+    "Invalid email address." : "عنوان بريد إلكتروني غير صالح.",
+    "user-disabled" : "تم تعطيل المستخدم.",
+    "The email has already been registered. Please login or reset your password." : "تم تسجيل البريد الإلكتروني بالفعل. يرجى تسجيل الدخول أو إعادة تعيين كلمة المرور الخاصة بك."
   }

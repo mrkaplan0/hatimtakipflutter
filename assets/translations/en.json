@@ -94,6 +94,11 @@
     "Gecerli Gizlilik Ayariniz: " : "Your Current Privacy Setting: ",
     "Gizlilik Ayarlari" : "Privacy Settings",
     "Sanirim burada cüz kalmadi.": "There's no more parts here.",
-    "Uppss!":"Uppss!"
+    "Uppss!":"Uppss!",
+    "No user found with this email." : "No user found with this email.",
+    "Incorrect password." : "Incorrect password.",
+    "Invalid email address." : "Invalid email address.",
+    "user-disabled" : "User is disabled.",
+    "The email has already been registered. Please login or reset your password." : "The email has already been registered. Please login or reset your password."
   }
   
