@@ -61,9 +61,6 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
         }
       }
       return _myUser;
-    } catch (e) {
-      debugPrint("Viewmodeldeki create user hata: $e");
-      return Future.error(e);
     } finally {
       state = ViewState.idle;
     }
@@ -97,11 +94,7 @@ class UserViewModel with ChangeNotifier implements MyAuthenticationDelegate {
         _myUser = await firestoreService.readMyUser(_myUser!.id);
       }
       return _myUser;
-    } /* catch (e) {
-      debugPrint("User Model signin error :$e");
-      return null;
-    }*/
-    finally {
+    } finally {
       state = ViewState.idle;
     }
   }

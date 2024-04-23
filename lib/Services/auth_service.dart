@@ -66,8 +66,6 @@ class FirebaseAuthService implements MyAuthenticationDelegate {
 
       return _usersFromFirebase(sonuc.user!);
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
       return Future.error(e);
     }
   }

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hatimtakipflutter/Models/partmodel.dart';
+import 'package:hatimtakipflutter/Viewmodels/dropdownitems_suranames.dart';
 import 'package:hatimtakipflutter/Views/detail_pages/cuzfinishedpage.dart';
 import 'package:hatimtakipflutter/riverpod/providers.dart';
 import 'package:pdfx/pdfx.dart';
@@ -25,13 +26,19 @@ class _QuranPageState extends ConsumerState<QuranPage> {
   int _actualPageNumber = 2, _allPagesCount = 0;
   late PdfController _pdfController;
   bool isVisible = true;
+  Map<String, int> sureler = {};
+  String selectedValue = 'Fatiha';
 
   @override
   void initState() {
     WakelockPlus.enable();
-    widget.part != null
-        ? _actualPageNumber = widget.part!.remainingPages.first + 2
-        : _actualPageNumber;
+    if (widget.part != null) {
+      _actualPageNumber = widget.part!.remainingPages.first + 2;
+    } else {
+      //for the dropdown button
+      selectedValue = SuraNames.selectedValue(
+          context.deviceLocale.toString().substring(0, 2));
+    }
     _pdfController = PdfController(
       document: PdfDocument.openAsset('assets/Kuran.pdf'),
       initialPage: _actualPageNumber,
@@ -49,6 +56,10 @@ class _QuranPageState extends ConsumerState<QuranPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.part == null) {
+      var deviceLocaleCode = context.deviceLocale.toString().substring(0, 2);
+      sureler = SuraNames.suraMap(deviceLocaleCode);
+    }
     return PopScope(
         canPop: false,
         onPopInvoked: (didPop) async {
@@ -173,8 +184,9 @@ class _QuranPageState extends ConsumerState<QuranPage> {
     return Align(
         alignment: Alignment.topLeft,
         child: Padding(
-          padding: const EdgeInsets.only(left: 10.0, top: 40.0),
+          padding: const EdgeInsets.only(left: 10.0, top: 40.0, right: 10),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () {
@@ -185,6 +197,25 @@ class _QuranPageState extends ConsumerState<QuranPage> {
                     }
                   },
                   icon: const Icon(Icons.arrow_back)),
+              //this dropdown button aim to jump to the page the person wants to read.
+              if (widget.part == null)
+                DropdownButton<String>(
+                  value: selectedValue,
+                  onChanged: (String? value) {
+                    selectedValue = value!;
+                    print(selectedValue);
+                    setState(() {
+                      _pdfController.jumpToPage(sureler[value]!.toInt());
+                    });
+                  },
+                  items: sureler.entries.map<DropdownMenuItem<String>>(
+                      (MapEntry<String, int> entry) {
+                    return DropdownMenuItem<String>(
+                      value: entry.key.toString(),
+                      child: Text(entry.key),
+                    );
+                  }).toList(),
+                ),
             ],
           ),
         ));

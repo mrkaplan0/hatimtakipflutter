@@ -52,7 +52,7 @@ class SettingsPage extends ConsumerWidget {
                         .watch(userViewModelProvider)
                         .signOut()
                         .then((value) {
-                      goToRouterPage(value, context);
+                      goToRouterPage(value, context, ref);
                     });
                   }),
               const SizedBox(height: 10),
@@ -62,9 +62,11 @@ class SettingsPage extends ConsumerWidget {
         ));
   }
 
-  void goToRouterPage(bool value, BuildContext context) {
+  void goToRouterPage(bool value, BuildContext context, WidgetRef ref) {
     if (value == true) {
       try {
+        ref.invalidate(userViewModelProvider);
+        ref.invalidate(pageControllerProv);
         Navigator.popAndPushNamed(context, "/RouterPage");
       } on Exception catch (e) {
         debugPrint(e.toString());

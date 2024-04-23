@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="hatimtakipflutter"
+        android:label="Hatim Oku"
         android:name="${applicationName}"
         android:icon="@mipmap/logo">
         android:enableOnBackInvokedCallback="true"

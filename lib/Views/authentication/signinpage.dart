@@ -77,7 +77,7 @@ class SignInPage extends ConsumerWidget {
                         CustomButton(
                             btnText: _signUpButtonText,
                             onPressed: () async {
-                              saveUser(context, ref);
+                              _saveUser(context, ref);
                             }),
 
                         const SizedBox(height: 20),
@@ -198,7 +198,7 @@ class SignInPage extends ConsumerWidget {
         child: Text(_signInAnonymouslyText));
   }
 
-  saveUser(BuildContext context, WidgetRef ref) async {
+  _saveUser(BuildContext context, WidgetRef ref) async {
     try {
       if (_formKey.currentState!.validate() &&
           ref.watch(isUsernameNotAvailableProv.notifier).state == false &&
@@ -215,6 +215,7 @@ class SignInPage extends ConsumerWidget {
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = _getErrorMessage(e);
+      // ignore: use_build_context_synchronously
       _showErrorDialog(context, errorMessage);
     }
   }
@@ -224,7 +225,7 @@ class SignInPage extends ConsumerWidget {
       context: rootNavigatorKey.currentContext!,
       builder: (context) {
         return AlertDialog(
-          title: Text('Hata'.tr() + "!"),
+          title: Text("${'Hata'.tr()}!"),
           content: Text(message),
           actions: [
             ElevatedButton(

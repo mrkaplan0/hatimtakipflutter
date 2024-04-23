@@ -71,13 +71,13 @@ class MyApp extends StatelessWidget {
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return Container(
-          color: Colors.white,
-          child: const SizedBox(
-              height: 250,
-              width: 250,
+        return const MaterialApp(
+            home: Scaffold(
+          body: SizedBox(
+              height: 30,
+              width: 50,
               child: Image(image: AssetImage('assets/images/logo.jpeg'))),
-        );
+        ));
       },
     );
   }

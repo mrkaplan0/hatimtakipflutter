@@ -196,7 +196,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       context: rootNavigatorKey.currentContext!,
       builder: (context) {
         return AlertDialog(
-          title: Text('Hata'.tr() + "!"),
+          title: Text("${'Hata'.tr()}!"),
           content: Text(message),
           actions: [
             ElevatedButton(
