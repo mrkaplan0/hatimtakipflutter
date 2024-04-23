@@ -3,7 +3,7 @@ class SuraNames {
     String text = '';
     switch (deviceLocalCode) {
       case "tr":
-        text = 'الْفَاتِحَةِ';
+        text = 'Fatiha';
       case "en":
         text = 'Al-Fatihah';
       case "ar":
@@ -21,7 +21,7 @@ class SuraNames {
     Map<String, int> map = {};
     switch (deviceLocalCode) {
       case "tr":
-        map = surasAr;
+        map = surasTr;
       case "en":
         map = surasEn;
       case "ar":

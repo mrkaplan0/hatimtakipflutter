@@ -34,17 +34,21 @@ class _QuranPageState extends ConsumerState<QuranPage> {
     WakelockPlus.enable();
     if (widget.part != null) {
       _actualPageNumber = widget.part!.remainingPages.first + 2;
-    } else {
-      //for the dropdown button
-      selectedValue = SuraNames.selectedValue(
-          context.deviceLocale.toString().substring(0, 2));
-    }
+    } else {}
     _pdfController = PdfController(
       document: PdfDocument.openAsset('assets/Kuran.pdf'),
       initialPage: _actualPageNumber,
     );
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //for the dropdown button
+    selectedValue = SuraNames.selectedValue(
+        context.deviceLocale.toString().substring(0, 2));
   }
 
   @override
