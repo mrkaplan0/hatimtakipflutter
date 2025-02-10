@@ -1,16 +1,12 @@
 # hatimtakipflutter
 
-A new Flutter project.
+This is my third flutter project.
 
-## Getting Started
+This app aims to enable users to share a religious book online and read it together in parts.
 
-This project is a starting point for a Flutter application.
+I tried riverpod for state management.
+For authentification and database processes, i used Firebase.
 
-A few resources to get you started if this is your first Flutter project:
+I added language support for 5 languages.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot 2025-02-10 130603](https://github.com/user-attachments/assets/b72452ff-48ad-4e0a-b193-5c6db1365348)
