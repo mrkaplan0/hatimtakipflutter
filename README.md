@@ -1,4 +1,4 @@
-# hatimtakipflutter
+# Hatim Oku
 
 This is my third flutter project.
 
