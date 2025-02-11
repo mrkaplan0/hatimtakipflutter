@@ -5,8 +5,10 @@ This is my third flutter project.
 This app aims to enable users to share a religious book online and read it together in parts.
 
 I tried riverpod for state management.
+
 For authentification and database processes, i used Firebase.
-googleAds added.
+
+GoogleAds added.
 
 I added language support for 5 languages.
 
