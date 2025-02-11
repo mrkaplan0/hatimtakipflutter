@@ -6,6 +6,7 @@ This app aims to enable users to share a religious book online and read it toget
 
 I tried riverpod for state management.
 For authentification and database processes, i used Firebase.
+googleAds added.
 
 I added language support for 5 languages.
 
